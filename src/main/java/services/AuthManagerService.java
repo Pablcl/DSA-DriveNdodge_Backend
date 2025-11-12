@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponses;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 
 @Api(value = "/auth", description = "Servicios de autenticación de usuarios")
@@ -70,5 +71,22 @@ public class AuthManagerService {
                     .entity("Error: " + e.getMessage())
                     .build();
         }
+    }
+
+    @GET
+    @Path("/users")
+    @ApiOperation(
+            value = "Obtener todos los usuarios registrados",
+            notes = "Devuelve una lista de todos los usuarios en el sistema."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Lista de usuarios obtenida correctamente", response = Usuario.class, responseContainer = "List"),
+    })
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUsers() {
+        List<Usuario> users = this.am.getRegisteredUsers();
+        return Response.status(Response.Status.OK)
+                .entity(users)
+                .build();
     }
 }

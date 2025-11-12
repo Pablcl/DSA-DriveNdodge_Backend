@@ -3,7 +3,9 @@ package database.impl;
 import database.BaseDeDatos;
 import database.models.Usuario;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BaseDeDatosHashMap implements BaseDeDatos {
@@ -39,5 +41,10 @@ public class BaseDeDatosHashMap implements BaseDeDatos {
     @Override
     public void updateUsuario(Usuario usuario) {
         usuarios.put(usuario.getUsername(), usuario);
+    }
+
+    @Override
+    public List<Usuario> getUsuarios() {
+        return new ArrayList<>(usuarios.values());
     }
 }
