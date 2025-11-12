@@ -37,7 +37,7 @@ public class AuthManagerService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(Usuario usuario) {
         try {
-            am.register(usuario.getUsername(), usuario.getPassword());
+            am.register(usuario);
             return Response.status(Response.Status.CREATED)
                     .entity(usuario)
                     .build();
@@ -62,7 +62,7 @@ public class AuthManagerService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(Usuario usuario) {
         try {
-            Usuario u = am.login(usuario.getUsername(), usuario.getPassword());
+            Usuario u = am.login(usuario);
             return Response.status(Response.Status.OK)
                     .entity(u)
                     .build();
