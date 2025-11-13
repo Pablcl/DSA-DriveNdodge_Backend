@@ -7,72 +7,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Registrarse - DriveN'Dodge</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container-custom {
-            background-color: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 450px;
-            width: 90%;
-        }
-        h2 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #007bff;
-            text-align: center;
-        }
-        .form-control {
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 1rem;
-        }
-        .form-control:focus {
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-            border-color: #86b7fe;
-        }
-        .btn-primary-custom {
-            font-size: 1.1rem;
-            padding: 12px 25px;
-            border-radius: 30px;
-            width: 100%;
-            background-color: #007bff;
-            border-color: #007bff;
-            transition: all 0.3s ease;
-        }
-        .btn-primary-custom:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-            transform: translateY(-2px);
-        }
-        .alert {
-            border-radius: 10px;
-        }
-        .footer-text {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .footer-text a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .footer-text a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-    <div class="container-custom">
+<body class="body-centered-layout">
+    <div class="container-custom form-container">
         <h2>Registrarse</h2>
         <div id="error-message" class="alert alert-danger" style="display: none;"></div>
         <div id="success-message" class="alert alert-success" style="display: none;"></div>
