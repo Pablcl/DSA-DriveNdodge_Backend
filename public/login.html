@@ -14,7 +14,7 @@
     <h2>Iniciar Sesión</h2>
     <div id="error-message" class="alert alert-danger" style="display: none;"></div>
     <div id="success-message" class="alert alert-success" style="display: none;"></div>
-    <form id="btn-login">
+    <form id="login-form">
         <div class="mb-3">
             <label for="username" class="form-label">Usuario</label>
             <input type="text" class="form-control" id="username" name="username" required>
@@ -26,14 +26,14 @@
         <button type="submit" class="btn btn-primary-custom">Entrar</button>
     </form>
     <div class="footer-text">
-        <p>¿No tienes una cuenta? <a href="../../src/main/webapp/register.html">Regístrate aquí</a></p>
-        <p><a href="../../src/main/webapp/index.html">Volver a la página principal</a></p>
+        <p>¿No tienes una cuenta? <a href="register.html">Regístrate aquí</a></p>
+        <p><a href="index.html">Volver a la página principal</a></p>
     </div>
 </div>
 
 <script>
     $(document).ready(function() {
-        $('#btn-login').submit(function(event) {
+        $('#login-form').submit(function(event) {
             event.preventDefault();
 
             // Ocultar mensajes previos
@@ -52,7 +52,7 @@
                 success: function(response) {
                     // Manejar respuesta exitosa
                     $('#success-message').text('¡Inicio de sesión exitoso! Redirigiendo...').show();
-                    $('#btn-login')[0].reset(); // Limpiar el formulario
+                    $('#login-form')[0].reset(); // Limpiar el formulario
 		            //guardar informació usuari al local
                     localStorage.setItem("username", username);
                     // Redirigir a la página principal después de unos segundos

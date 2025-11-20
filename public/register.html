@@ -1,105 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Registrarse - DriveN'Dodge</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+        }
+    </style>
 </head>
 <body class="body-centered-layout">
-    <div class="container-custom form-container">
-        <h2>Registrarse</h2>
-        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-        <div id="success-message" class="alert alert-success" style="display: none;"></div>
-        <form id="btn-register">
-            <div class="mb-3">
-                <label for="username" class="form-label">Usuario</label>
-                <input type="text" class="form-control" id="username" name="username" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <div class="mb-3">
-                <label for="confirm-password" class="form-label">Confirmar Contraseña</label>
-                <input type="password" class="form-control" id="confirm-password" name="confirm-password" required>
-            </div>
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" required>
-            </div>
-            <div class="mb-3">
-                <label for="apellido" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="apellido" name="apellido" required>
-            </div>
-            <div class="mb-3">
-                <label for="gmail" class="form-label">Gmail</label>
-                <input type="email" class="form-control" id="gmail" name="gmail" required>
-            </div>
-            <div class="mb-3">
-                <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
-            </div>
-            <button type="submit" class="btn btn-primary-custom">Registrarse</button>
-        </form>
-        <div class="footer-text">
-            <p>¿Ya tienes una cuenta? <a href="login.html">Inicia Sesión aquí</a></p>
-            <p><a href="index.html">Volver a la página principal</a></p>
+<div class="container-custom form-container">
+    <h2>Registrarse</h2>
+
+    <div id="error-message" class="alert alert-danger" style="display: none"></div>
+    <div id="success-message" class="alert alert-success" style="display: none"></div>
+
+    <form id="register-form">
+        <div class="mb-3">
+            <label for="username" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="username" name="username" required>
         </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="confirm-password" class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" id="confirm-password" name="confirm-password" required>
+            <small id="password-match-message" class="text-danger" style="display: none;">Las contraseñas no coinciden.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="gmail" class="form-label">Gmail</label>
+            <input type="email" class="form-control" id="gmail" name="gmail" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+            <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary-custom">Registrarse</button>
+    </form>
+
+    <div class="footer-text mt-3">
+        <p>¿Ya tienes una cuenta? <a href="login.html">Inicia Sesión aquí</a></p>
+        <p><a href="index.html">Volver a la página principal</a></p>
     </div>
+</div>
 
 <script>
-$(document).ready(function() {
-    $('#btn-register').submit(function(event) { //submit es click pero para formularios. tmb va con enter
-        // ¡CRÍTICO! Evita que la página se recargue y la petición AJAX se cancele.
-        event.preventDefault();
-        
-        $('#error-message').hide();
-        $('#success-message').hide(); //cuando le das a submit borra el error o succes anterior
+    $(document).ready(function() {
 
-        const username = $('#username').val();
-        const password = $('#password').val();
-        const confirmPassword = $('#confirm-password').val();
-        const nombre = $('#nombre').val();
-        const apellido = $('#apellido').val();
-        const gmail = $('#gmail').val();
-        const fechaNacimiento = $('#fechaNacimiento').val();
+        $('#password, #confirm-password').on('input', function() {
+            const password = $('#password').val();
+            const confirmPassword = $('#confirm-password').val();
 
-        if (password !== confirmPassword) {
-            $('#error-message').text('Las contraseñas no coinciden.').show();
-            return;
-        }
-        
-
-        //petición AJAX al backend
-        $.ajax({
-            url: '/v1/auth/register', // La URL del endpoint de registro
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ username: username, password: password, nombre: nombre, apellido: apellido, gmail: gmail, fechaNacimiento: fechaNacimiento }), //para pasar de variables (objeto javascript) a json
-            success: function(response) {
-                $('#success-message').text('¡Registro exitoso! Redirigiendo a la página de inicio de sesión...').show();
-                //limpiar el formulario
-                $('#btn-register')[0].reset();
-                // Redirigir a la página de login después de unos segundos
-                setTimeout(function() {
-                    window.location.href = 'login.html';
-                }, 1500);
-            },
-            error: function(jqXHR) {
-                // Manejar errores
-                let errorMessage = 'Error en el registro. Por favor, inténtalo de nuevo.';
-                if (jqXHR.responseText) { //jqXHR es un objeto q te dice q error es: si es un 400,401,500 leyendo de cabecera...
-                    errorMessage = jqXHR.responseText;
-                }
-                $('#error-message').text(errorMessage).show();
+            if (password && confirmPassword && password !== confirmPassword) {
+                $('#password, #confirm-password').addClass('is-invalid');
+                $('#password-match-message').show();
+            } else {
+                $('#password, #confirm-password').removeClass('is-invalid');
+                $('#password-match-message').hide();
             }
         });
+
+        $('#register-form').submit(function(event) {
+            event.preventDefault();
+
+            $('#error-message').hide();
+            $('#success-message').hide();
+
+            const username = $('#username').val();
+            const password = $('#password').val();
+            const confirmPassword = $('#confirm-password').val();
+            const nombre = $('#nombre').val();
+            const apellido = $('#apellido').val();
+            const gmail = $('#gmail').val();
+            const fechaNacimiento = $('#fechaNacimiento').val();
+
+            if (password !== confirmPassword) {
+                $('#error-message').text('Las contraseñas no coinciden.').show();
+                $('#password, #confirm-password').addClass('is-invalid');
+                return;
+            }
+
+            $.ajax({
+                url: '/v1/auth/register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ username, password, nombre, apellido, gmail, fechaNacimiento }),
+                success: function(response) {
+                    $('#success-message').text('¡Registro exitoso! Redirigiendo a la página de inicio de sesión...').show();
+                    $('#register-form')[0].reset();
+                    $('#password, #confirm-password').removeClass('is-invalid');
+                    setTimeout(function() {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                },
+                error: function(jqXHR) {
+                    let errorMessage = 'Error en el registro. Por favor, inténtalo de nuevo.';
+                    if (jqXHR.responseText) errorMessage = jqXHR.responseText;
+                    $('#error-message').text(errorMessage).show();
+                }
+            });
+        });
+
     });
-});
 </script>
 </body>
 </html>
