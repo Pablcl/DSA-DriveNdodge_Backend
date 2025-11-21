@@ -15,5 +15,4 @@ public interface BaseDeDatos {
     List<Item> getItems();
     Item getItem(Integer id);
     void addItem(Item item);
-
 }
