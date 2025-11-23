@@ -1,8 +1,10 @@
 package manager;
 
-import database.BaseDeDatos;
-import database.impl.BaseDeDatosHashMap;
-import database.models.Usuario;
+
+import db.orm.SessionImpl;
+import db.orm.dao.IUsuarioDAO;
+import db.orm.dao.UsuarioDAOImpl;
+import db.orm.model.Usuario;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -11,10 +13,10 @@ public class AuthManagerImpl implements AuthManager {
     private static final Logger LOGGER = Logger.getLogger(AuthManagerImpl.class);
 
     private static AuthManagerImpl instance;
-    private final BaseDeDatos baseDeDatos;
+    private IUsuarioDAO userDAO;
 
     private AuthManagerImpl() {
-        this.baseDeDatos = BaseDeDatosHashMap.getInstance();
+        this.userDAO = UsuarioDAOImpl.getInstance();
     }
 
     public static AuthManagerImpl getInstance() {
@@ -26,30 +28,33 @@ public class AuthManagerImpl implements AuthManager {
     }
 
     @Override
-    public void register(Usuario usr) {
-        LOGGER.info(" Inicio login: username: " + usr.getUsername()+ " password: " + usr.getPassword()+" nombre: " + usr.getNombre() +" apellido: " + usr.getApellido()+" gmail: " + usr.getGmail()+" fechaNacimiento: " + usr.getFechaNacimiento());
-        if (baseDeDatos.getUsuario(usr.getUsername()) != null) {
-            LOGGER.error("Intento de registro fallido: El usuario ya existe: " + usr);
+    public void register(Usuario usuario) {
+        LOGGER.info(" Inicio login: username: " + usuario.getUsername()+ " password: " + usuario.getPassword()+" nombre: " + usuario.getNombre() +" apellido: " + usuario.getApellido()+" gmail: " + usuario.getGmail()+" fechaNacimiento: " + usuario.getFechaNacimiento());
+        Usuario existent = userDAO.getUsuarioByEmail(usuario.getGmail());
+        if (existent != null) {
+            LOGGER.error("Intento de registro fallido: El usuario con correo ya existe: " + usuario.getGmail());
             throw new RuntimeException("El usuario ya existe");
         }
-        LOGGER.info("Se ha registrado un nuevo usuario: " + usr);
-        baseDeDatos.addUsuario(usr);
+        usuario.setId(0); //PER AUTOINCREMENT EN BASE DADES
+        userDAO.addUsuario(usuario);
+        LOGGER.info("Se ha registrado un nuevo usuario: " + usuario.getUsername());
+
     }
 
     @Override
-    public Usuario login(Usuario usr) {
-        LOGGER.info(" Inicio login: username: " + usr.getUsername()+ " password: " + usr.getPassword());
-        Usuario usuario = baseDeDatos.getUsuario(usr.getUsername());
-        if (usuario == null || !usuario.getPassword().equals(usr.getPassword())) {
-            LOGGER.error("Intento de login fallido para el usuario: " + usr);
+    public Usuario login(Usuario usuario) {
+        LOGGER.info(" Inicio login: username: " + usuario.getUsername()+ " password: " + usuario.getPassword());
+        Usuario usuarioExistent = userDAO.getUsuarioByUsername(usuario.getUsername());
+        if (usuarioExistent == null || !usuarioExistent.getPassword().equals(usuario.getPassword())) {
+            LOGGER.error("Intento de login fallido para el usuario: " + usuario);
             throw new RuntimeException("Usuario o contraseña incorrectos");
         }
-        LOGGER.info("Inicio de sesión exitoso: Usuario " + usr);
-        return usuario;
+        LOGGER.info("Inicio de sesión exitoso: Usuario " + usuario);
+        return usuarioExistent;
     }
 
     @Override
     public List<Usuario> getRegisteredUsers() {
-        return baseDeDatos.getUsuarios();
+        return userDAO.getUsuarios();
     }
 }

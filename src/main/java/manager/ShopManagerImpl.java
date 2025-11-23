@@ -1,9 +1,13 @@
 package manager;
 
-import database.BaseDeDatos;
-import database.impl.BaseDeDatosHashMap;
-import database.models.Item;
-import database.models.Usuario;
+
+import db.orm.dao.IItemDAO;
+import db.orm.dao.IUsuarioDAO;
+import db.orm.dao.IItemDAO;
+import db.orm.dao.ItemDAOImpl;
+import db.orm.dao.UsuarioDAOImpl;
+import db.orm.model.Item;
+import db.orm.model.Usuario;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -13,10 +17,12 @@ public class ShopManagerImpl implements ShopManager {
     private static final Logger LOGGER = Logger.getLogger(ShopManagerImpl.class);
 
     private static ShopManagerImpl instance;
-    private final BaseDeDatos baseDeDatos;
+    private final IItemDAO itemDAO;
+    private final IUsuarioDAO usuarioDAO;
 
     private ShopManagerImpl() {
-        this.baseDeDatos = BaseDeDatosHashMap.getInstance();
+        this.usuarioDAO = UsuarioDAOImpl.getInstance();
+        this.itemDAO = ItemDAOImpl.getInstance();
     }
 
     public static ShopManagerImpl getInstance() {
@@ -30,18 +36,18 @@ public class ShopManagerImpl implements ShopManager {
     @Override
     public List<Item> getItemsTienda() {
         LOGGER.info("Obteniendo lista de items de la tienda");
-        return baseDeDatos.getItems();
+        return itemDAO.getItems();
     }
 
     @Override
-    public void comprarItem(String username, Integer itemId) {
-        Usuario usuario = baseDeDatos.getUsuario(username);
+    public void comprarItem(String username, int itemId) {
+        Usuario usuario = usuarioDAO.getUsuario(itemId);
         if (usuario == null) {
             LOGGER.error("Intento de compra fallido: Usuario no encontrado: " + username);
             throw new RuntimeException("Usuario no encontrado");
         }
 
-        Item item = baseDeDatos.getItem(itemId);
+        Item item = null; //usuario.getItem(itemId);
         if (item == null) {
             LOGGER.error("Intento de compra fallido: Item no encontrado: " + itemId);
             throw new RuntimeException("Item no encontrado");
@@ -56,27 +62,30 @@ public class ShopManagerImpl implements ShopManager {
     }
     @Override
     public int getMonedas(String username) {
-        Usuario u = this.baseDeDatos.getUsuario(username);
-        LOGGER.info("monedas:"+u.getMonedas());
+        Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
+        LOGGER.info("monedas:"+ u.getMonedas());
         if (u == null) return -1;
         return u.getMonedas();
     }
     @Override
     public Usuario getPerfil(String username){
-        return this.baseDeDatos.getUsuario(username);
+        return this.usuarioDAO.getUsuarioByUsername(username);
     }
 
     public int getMejorPuntuacion(String username) {
-        Usuario u = this.baseDeDatos.getUsuario(username);
+        Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
         if (u == null) return -1;
         return u.getMejorPuntuacion();
     }
     @Override
     public List<Usuario> getRanking() {
-        List<Usuario> ranking = new ArrayList<>(this.baseDeDatos.getUsuarios());
-        ranking.sort((u1, u2) ->
-                Integer.compare(u2.getMejorPuntuacion(), u1.getMejorPuntuacion()));
+        List<Usuario> ranking = usuarioDAO.getUsuarios();
+        if (ranking != null){
+            ranking.sort((u1,u2) -> Integer.compare(u2.getMejorPuntuacion(), u1.getMejorPuntuacion()));
+        }
         return ranking;
     }
+
+
 }
 
