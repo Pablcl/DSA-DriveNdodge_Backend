@@ -149,6 +149,7 @@
                 url: '/v1/shop/items',
                 dataType: 'json',
                 success: function(items) {
+                    console.log("ITEMS REBUTS JSON:", items);
                     let container = $('#shop-items-container');
                     container.empty();
 
@@ -164,7 +165,8 @@
                         if (!ruta.startsWith("http") && !ruta.startsWith("/")) {
                             ruta = "/" + ruta;
                         }
-
+                        let idReal = item.id || item.ID;
+                        if (!idReal) console.error("ALERTA: Aquest item no té ID!", item);
                         let html = `
                                 <div class="col-md-4 mb-4">
                                     <div class="card h-100">
@@ -180,7 +182,7 @@
                                             <div class="mt-auto pt-3">
                                                 <h4 class="fw-bold mb-3">${item.precio} 💰</h4>
                                                 <button class="btn btn-buy w-100 py-2 rounded-pill shadow-sm btn-buy"
-                                                        data-item-id="${item.id}"
+                                                        data-item-id="${idReal}"
                                                         data-item-price="${item.precio}"
                                                         data-item-name="${item.nombre}">
                                                     COMPRAR ARA

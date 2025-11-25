@@ -1,13 +1,14 @@
 package manager;
 
 
+import db.orm.dao.*;
 import db.orm.dao.IItemDAO;
-import db.orm.dao.IUsuarioDAO;
-import db.orm.dao.IItemDAO;
-import db.orm.dao.ItemDAOImpl;
-import db.orm.dao.UsuarioDAOImpl;
+import db.orm.dao.InventarioDAOImpl;
+import db.orm.dao.InventarioDAO;
+import db.orm.model.Inventario;
 import db.orm.model.Item;
 import db.orm.model.Usuario;
+
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -19,10 +20,12 @@ public class ShopManagerImpl implements ShopManager {
     private static ShopManagerImpl instance;
     private final IItemDAO itemDAO;
     private final IUsuarioDAO usuarioDAO;
+    private final InventarioDAO inventarioDAO;
 
     private ShopManagerImpl() {
         this.usuarioDAO = UsuarioDAOImpl.getInstance();
         this.itemDAO = ItemDAOImpl.getInstance();
+        this.inventarioDAO = InventarioDAOImpl.getInstance();
     }
 
     public static ShopManagerImpl getInstance() {
@@ -41,24 +44,27 @@ public class ShopManagerImpl implements ShopManager {
 
     @Override
     public void comprarItem(String username, int itemId) {
-        Usuario usuario = usuarioDAO.getUsuario(itemId);
+        Usuario usuario = usuarioDAO.getUsuarioByUsername(username);
         if (usuario == null) {
             LOGGER.error("Intento de compra fallido: Usuario no encontrado: " + username);
             throw new RuntimeException("Usuario no encontrado");
         }
 
-        Item item = null; //usuario.getItem(itemId);
+        Item item = itemDAO.getItem(itemId);
         if (item == null) {
             LOGGER.error("Intento de compra fallido: Item no encontrado: " + itemId);
             throw new RuntimeException("Item no encontrado");
         }
-        int monedas = usuario.getMonedas();
+        int monedas = getMonedas(username);
         if (monedas < item.getPrecio()) throw new RuntimeException("Monedas insuficientes");;
-
-        usuario.setMonedas(monedas - item.getPrecio());
-
+        usuario.setMonedas(monedas-item.getPrecio());
+        usuarioDAO.updateUsuario(usuario);
+        LOGGER.info("Monedas de usuario: " + usuarioDAO.getUsuarioByUsername(username).getMonedas());
+        Inventario inventario = new Inventario(usuario.getId(), item.getId());
+        inventarioDAO.addInventario(inventario);
         LOGGER.info("Usuario '" + username + "' ha comprado el item: " + item);
-        // Aquí se implementaría la lógica de compra (descontar dinero, añadir item al inventario, etc.)
+
+
     }
     @Override
     public int getMonedas(String username) {

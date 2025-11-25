@@ -9,6 +9,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import services.DTOs.CoinsResponse;
+import services.DTOs.MessageResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -97,18 +99,6 @@ public class ShopService {
         GenericEntity<List<Usuario>> entity = new GenericEntity<List<Usuario>>(ranking) {};
         return Response.status(200).entity(entity).build();
     }
-    public static class CoinsResponse {
-        public int coins; // Public perquè MOXy ho llegeixi ràpid
 
-        public CoinsResponse() {} // Constructor buit obligatori
-        public CoinsResponse(int coins) { this.coins = coins; }
-    }
-
-    public static class MessageResponse {
-        public String message;
-
-        public MessageResponse() {} // Constructor buit obligatori
-        public MessageResponse(String message) { this.message = message; }
-    }
 }
 

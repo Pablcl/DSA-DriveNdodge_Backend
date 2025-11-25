@@ -18,9 +18,9 @@ public class QueryHelper {
 
         sb.append("ID");
         for (String field: fields) {
-            if (!field.equals("ID")) sb.append(", ").append(field);
+            if (!field.equalsIgnoreCase("ID")) sb.append(", ").append(field);
         }
-        sb.append(") VALUES (?");
+        sb.append(") VALUES (0");
 
         for (String field: fields) {
             if (!field.equals("ID"))  sb.append(", ?");
@@ -49,8 +49,23 @@ public class QueryHelper {
                 query.append(" AND ").append(key).append("=?");
             }
         }
-        // ------------------------------------------------------------------
 
         return query.toString();
+    }
+    public static String updateQueryUPDATE(Object entity) {
+        StringBuffer sb = new StringBuffer("UPDATE ");
+        sb.append(entity.getClass().getSimpleName()).append(" SET ");
+        String[] fields = db.orm.util.ObjectHelper.getFields(entity);
+        boolean first = true;
+        for (String field : fields) {
+            if (field.equalsIgnoreCase("ID")) continue;
+            if (!first) {
+                sb.append(", ");
+            }
+            sb.append(field).append("=?");
+            first = false;
+        }
+        sb.append(" WHERE ID= ?");
+        return sb.toString();
     }
 }

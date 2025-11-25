@@ -1,6 +1,7 @@
 package db.orm.dao;
 
 
+import db.orm.model.Item;
 import db.orm.model.Usuario;
 
 import java.util.List;

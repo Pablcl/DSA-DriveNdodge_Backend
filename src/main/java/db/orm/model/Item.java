@@ -1,7 +1,7 @@
 package db.orm.model;
 
 public class Item {
-    private Integer id;
+    private int ID;
     private String nombre;
     private String descripcion;
     private int precio;
@@ -9,20 +9,20 @@ public class Item {
     public Item() {
     }
 
-    public Item(int id, String nombre, String descripcion, int precio,  String imagen) {
-        this.id = id;
+    public Item(int ID, String nombre, String descripcion, int precio,  String imagen) {
+        this.ID = ID;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.imagen = imagen;
     }
 
-    public Integer getId() {
-        return id;
+    public int getId() {
+        return ID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(int id) {
+        this.ID = ID;
     }
 
     public String getNombre() {
@@ -55,7 +55,7 @@ public class Item {
     @Override
     public String toString() {
         return "Item{" +
-                "id=" + id +
+                "id=" + ID +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +

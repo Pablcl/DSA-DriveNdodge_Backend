@@ -4,6 +4,7 @@ package db.orm.dao;
 
 import db.orm.FactorySession;
 import db.orm.Session;
+import db.orm.model.Item;
 import db.orm.model.Usuario;
 
 import java.util.HashMap;
@@ -85,24 +86,21 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
             session.close();
         }
     }
-
     public void updateUsuario(Usuario usuario) {
-        /*Employee employee  = this.getEmployee(employeeID);
-        employee.setName(name);
-        employee.setSurname(surname);
-        employee.setSalary(salary);
-
-        Session session = null;
+        Session session = FactorySession.openSession();
         try {
             session = FactorySession.openSession();
-            session.update(employee);
+            session.update(usuario);
         }
         catch (Exception e) {
-            // LOG
+            e.printStackTrace();
         }
         finally {
-            session.close();
-        }*/
+            if (session != null) {
+                session.close();
+            }
+
+        }
     }
 
 
