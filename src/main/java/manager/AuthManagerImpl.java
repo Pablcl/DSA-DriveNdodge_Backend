@@ -22,7 +22,7 @@ public class AuthManagerImpl implements AuthManager {
     public static AuthManagerImpl getInstance() {
         if (instance == null) {
             instance = new AuthManagerImpl();
-            LOGGER.info("Instancia de AuthManagerImpl creada");
+            LOGGER.info("Instancia de AuthManagerImpl creado");
         }
         return instance;
     }
@@ -54,21 +54,27 @@ public class AuthManagerImpl implements AuthManager {
             throw new RuntimeException("El apellido solo puede contener letras y espacios.");
         }
 
-        // --- VALIDACIÓN DE FECHA DE NACIMIENTO (Mínimo 16 años) ---
+        // --- VALIDACIÓN DE FECHA DE NACIMIENTO (Mínimo 16 años, Máximo 122 años) ---
         final int MIN_AGE = 16;
+        final int MAX_AGE = 122;
         if (usr.getFechaNacimiento() == null) {
             throw new RuntimeException("Fecha de nacimiento obligatoria.");
         }
         try {
             LocalDate fechaNacimiento = LocalDate.parse(usr.getFechaNacimiento());
-            LocalDate fechaCorte = LocalDate.now().minusYears(MIN_AGE); // debe haber nacido en o antes de esta fecha
+            LocalDate fechaCorteMin = LocalDate.now().minusYears(MIN_AGE); // debe haber nacido en o antes de esta fecha
+            LocalDate fechaCorteMax = LocalDate.now().minusYears(MAX_AGE); // no puede ser anterior a esta fecha (demasiado mayor)
 
             if (fechaNacimiento.isAfter(LocalDate.now())) {
                 throw new RuntimeException("La fecha de nacimiento no puede ser futura.");
             }
 
-            if (fechaNacimiento.isAfter(fechaCorte)) {
+            if (fechaNacimiento.isAfter(fechaCorteMin)) {
                 throw new RuntimeException("Debes tener al menos " + MIN_AGE + " años para registrarte.");
+            }
+
+            if (fechaNacimiento.isBefore(fechaCorteMax)) {
+                throw new RuntimeException("No eres tan viejo, no intentes registrarte con más de " + MAX_AGE + " años.");
             }
         } catch (DateTimeParseException e) {
             throw new RuntimeException("Formato de fecha de nacimiento inválido (debe ser AAAA-MM-DD).");

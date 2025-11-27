@@ -15,7 +15,7 @@
     <div id="error-message" class="alert alert-danger" style="display: none"></div>
     <div id="success-message" class="alert alert-success" style="display: none"></div>
 
-    <form id="register-form">
+    <form id="register-form" novalidate>
         <div class="mb-3">
             <label for="username" class="form-label">Usuario</label>
             <input type="text" class="form-control" id="username" name="username" required>
@@ -62,6 +62,22 @@
 
 <script>
     $(document).ready(function() {
+
+        // Configurar límites del datepicker según la edad mínima/máxima (mejora UX)
+        (function configureDatepickerLimits() {
+            const MIN_AGE = 16;
+            const MAX_AGE = 122;
+            const today = new Date();
+            const cutoffMax = new Date(); // fecha máxima seleccionable = hoy - MIN_AGE
+            cutoffMax.setFullYear(cutoffMax.getFullYear() - MIN_AGE);
+            const cutoffMin = new Date(); // fecha mínima seleccionable = hoy - MAX_AGE
+            cutoffMin.setFullYear(cutoffMin.getFullYear() - MAX_AGE);
+            const pad = (n) => n < 10 ? '0' + n : n;
+            const cutoffStrMax = cutoffMax.getFullYear() + '-' + pad(cutoffMax.getMonth()+1) + '-' + pad(cutoffMax.getDate());
+            const cutoffStrMin = cutoffMin.getFullYear() + '-' + pad(cutoffMin.getMonth()+1) + '-' + pad(cutoffMin.getDate());
+            $('#fechaNacimiento').attr('max', cutoffStrMax);
+            $('#fechaNacimiento').attr('min', cutoffStrMin);
+        })();
 
         $('#password, #confirm-password').on('input', function() {
             const password = $('#password').val();
@@ -126,6 +142,7 @@
             // ===============================================
 
             const MIN_AGE = 16;
+            const MAX_AGE = 122;
             if (!fechaNacimiento) {
                 $('#error-message').text('La fecha de nacimiento es obligatoria.').show();
                 $('#fechaNacimiento').addClass('is-invalid');
@@ -150,14 +167,11 @@
                 $('#fechaNacimiento').addClass('is-invalid');
                 return;
             }
-
-            // Ajuste del atributo max del datepicker para mejorar UX (evita seleccionar fechas no válidas)
-            // Se pone dinámicamente por si la página se mantiene abierta mucho tiempo.
-            const cutoff = new Date();
-            cutoff.setFullYear(cutoff.getFullYear() - MIN_AGE);
-            const pad = (n) => n < 10 ? '0' + n : n;
-            const cutoffStr = cutoff.getFullYear() + '-' + pad(cutoff.getMonth()+1) + '-' + pad(cutoff.getDate());
-            $('#fechaNacimiento').attr('max', cutoffStr);
+            if (age > MAX_AGE) {
+                $('#error-message').text('No eres tan viejo, no intentes registrarte con más de ' + MAX_AGE + ' años.').show();
+                $('#fechaNacimiento').addClass('is-invalid');
+                return;
+            }
 
             // ===============================================
             // FIN: VALIDACIÓN
