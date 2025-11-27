@@ -43,7 +43,7 @@
         </div>
         <div class="mb-3">
             <label for="mail" class="form-label">Mail</label>
-            <input type="gmail" class="form-control" id="mail" name="mail" required>
+            <input type="email" class="form-control" id="mail" name="mail" required>
         </div>
 
         <div class="mb-3">
@@ -100,7 +100,7 @@
                 url: '/v1/auth/register',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ username, password, nombre, apellido, gmail: mail, fechaNacimiento }),
+                data: JSON.stringify({ username, password, nombre, apellido, email: mail, fechaNacimiento }),
                 success: function(response) {
                     $('#success-message').text('¡Registro exitoso! Redirigiendo a la página de inicio de sesión...').show();
                     $('#register-form')[0].reset();

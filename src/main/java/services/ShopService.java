@@ -86,43 +86,71 @@ public class ShopService {
 
         return Response.ok("{\"coins\":" + monedas + "}").build();
     }
-    @GET
-    @Path("/perfil/{username}")
-    @ApiOperation(
-            value = "Devuelve perfil usuario",
-            notes = "Devuelve perfil usuario en funcion de id"
-    )
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPerfil(@PathParam("username") String usernameJson) {
+//    @GET
+//    @Path("/perfil/{username}")
+//    @ApiOperation(
+//            value = "Devuelve perfil usuario",
+//            notes = "Devuelve perfil usuario en funcion de id"
+//    )
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getPerfil(@PathParam("username") String usernameJson) {
+//
+//        usernameJson = usernameJson.replace("\"", "").trim();
+//        Usuario u = shopManager.getPerfil(usernameJson);
+//
+//        if (u == null) {
+//            return Response.status(Response.Status.NOT_FOUND)
+//                    .entity("{\"error\":\"Usuario no encontrado: " + usernameJson + "\"}")
+//                    .build();
+//        }
+//
+//        String json = String.format(
+//                "{" +
+//                        "\"username\":\"%s\"," +
+//                        "\"nombre\":\"%s\"," +
+//                        "\"apellido\":\"%s\"," +
+//                        "\"email\":\"%s\"," +
+//                        "\"monedas\":%d," +
+//                        "\"mejorPuntuacion\":%d" +
+//                        "}",
+//                u.getUsername(),
+//                u.getNombre(),
+//                u.getApellido(),
+//                u.getEmail(),
+//                u.getMonedas(),
+//                u.getMejorPuntuacion()
+//        );
+//
+//        return Response.ok(json).build();
+//    }
+@GET
+@Path("/perfil/{username}")
+@ApiOperation(
+        value = "Devuelve perfil usuario",
+        notes = "Devuelve el objeto completo del usuario buscando por su username"
+)
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Perfil encontrado", response = Usuario.class),
+        @ApiResponse(code = 404, message = "Usuario no encontrado", response = String.class)
+})
+@Produces(MediaType.APPLICATION_JSON)
+public Response getPerfil(@PathParam("username") String username) {
 
-        usernameJson = usernameJson.replace("\"", "").trim();
-        Usuario u = shopManager.getPerfil(usernameJson);
+    // Limpiamos el username por si llega con comillas extrañas
+    String cleanUsername = username.replace("\"", "").trim();
 
-        if (u == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Usuario no encontrado: " + usernameJson + "\"}")
-                    .build();
-        }
+    Usuario u = shopManager.getPerfil(cleanUsername);
 
-        String json = String.format(
-                "{" +
-                        "\"username\":\"%s\"," +
-                        "\"nombre\":\"%s\"," +
-                        "\"apellido\":\"%s\"," +
-                        "\"email\":\"%s\"," +
-                        "\"monedas\":%d," +
-                        "\"mejorPuntuacion\":%d" +
-                        "}",
-                u.getUsername(),
-                u.getNombre(),
-                u.getApellido(),
-                u.getGmail(),
-                u.getMonedas(),
-                u.getMejorPuntuacion()
-        );
-
-        return Response.ok(json).build();
+    if (u == null) {
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity("{\"error\":\"Usuario no encontrado: " + cleanUsername + "\"}")
+                .build();
     }
+
+    // ¡ESTA ES LA CLAVE!
+    // Pasamos el objeto 'u' directamente y Jersey crea el JSON perfecto por ti.
+    return Response.status(Response.Status.OK).entity(u).build();
+}
 
     @GET
     @Path("/ranking")

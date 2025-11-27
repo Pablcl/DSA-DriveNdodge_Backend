@@ -1,14 +1,11 @@
 package database.models;
 
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
-
 public class Usuario {
     private String username;
     private String password;
     private String nombre;
     private String apellido;
-    private String gmail;
+    private String email;
     private String fechaNacimiento;
     private int monedas;
     private int mejorPuntuacion;
@@ -16,12 +13,12 @@ public class Usuario {
         this.monedas=1000;
     }
 
-    public Usuario(String username, String password,  String nombre, String apellido, String gmail, String fechaNacimiento) {
+    public Usuario(String username, String password, String nombre, String apellido, String email, String fechaNacimiento) {
         this.username = username;
         this.password = password;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.gmail = gmail;
+        this.email = email;
         this.fechaNacimiento = fechaNacimiento;
         this.monedas = 1000;
         this.mejorPuntuacion = 0;
@@ -59,12 +56,12 @@ public class Usuario {
         this.apellido = apellido;
     }
 
-    public String getGmail() {
-        return gmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setGmail(String gmail) {
-        this.gmail = gmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFechaNacimiento() {

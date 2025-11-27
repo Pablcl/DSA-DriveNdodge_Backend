@@ -34,10 +34,11 @@
 
         // Validar usuario logueado
         const username = localStorage.getItem("username");
-        if (!username) {
-            window.location.href = "login.html";
-            return;
-        }
+           // localStorage.getItem("username");
+        //if (!username) {
+          //  window.location.href = "login.html";
+            //return;
+        //}
 
         // Cargar datos del perfil desde el backend
         $.ajax({
