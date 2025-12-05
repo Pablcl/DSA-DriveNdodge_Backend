@@ -1,6 +1,7 @@
 package services;
 
-import database.models.Usuario;
+
+import db.orm.model.Usuario;
 import manager.AuthManagerImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

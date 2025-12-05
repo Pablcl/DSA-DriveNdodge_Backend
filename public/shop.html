@@ -1,192 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Tienda - DriveN'Dodge</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Botiga - DriveN'Dodge</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <style>
+        body {
+            background-color: #1a1a1a; /* Fons fosc */
+            color: #f0f0f0;
+        }
+        .navbar-custom {
+            background-color: #000000;
+            border-bottom: 2px solid #ffc107;
+        }
+        .card {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.2);
+            border-color: #ffc107;
+        }
+        .text-gold {
+            color: #ffc107;
+        }
+        .btn-buy {
+            background-color: #ffc107;
+            color: #000;
+            font-weight: bold;
+            border: none;
+        }
+        .btn-buy:hover {
+            background-color: #e0a800;
+            color: #fff;
+        }
+        .nav-link:hover {
+            color: #ffc107 !important;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">DriveN'Dodge</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="perfil.html">Mi Perfil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="ranking.html">Ranking</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="inventario.html">Inventario</a>
-                    </li>
-                    <li class="nav-item">
-                        <span id="coins-display" class="nav-link fw-bold">💰 0</span>
-                    </li>
-                    <li class="nav-item">
-                        <button id="logout-button" class="btn btn-logout">Cerrar Sesión</button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <div class="container container-main">
-        <h1 class="shop-h1">Tienda de Artículos</h1>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <!-- Els ítems es carregaran dinàmicament aquí -->
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-gold" href="index.html">🏎️ DriveN'Dodge</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active text-gold" href="shop.html">🛒 Botiga</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">🎒 Inventari</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ranking.html">🏆 Ranking</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item me-3">
+                    <div class="d-flex align-items-center bg-dark border border-warning rounded px-3 py-1">
+                        <span class="me-2">💰</span>
+                        <span id="coins-display" class="fw-bold text-white">---</span>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        👤 <span id="username-display">Usuari</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end bg-dark border-secondary">
+                        <li><a class="dropdown-item text-light" href="profile.html">Mi Perfil</a></li>
+                        <li><hr class="dropdown-divider bg-secondary"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="btn-logout">Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <script>
-        $(document).ready(function() {
+<div class="container mt-5">
+    <h2 class="text-center mb-5 text-uppercase fw-bold"><span class="text-gold">Botiga</span> d'Objectes</h2>
 
-            // -------------------- LOGOUT --------------------
-            $('#logout-button').on('click', function() {
-                localStorage.removeItem("username");
-                localStorage.removeItem("monedas");
-                localStorage.removeItem("inventory");
-                window.location.href = 'index.html';
-            });
+    <div id="shop-items-container" class="row">
+        <div class="text-center py-5">
+            <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Carregant...</span>
+            </div>
+        </div>
+    </div>
+</div>
 
-            // ------------------ VALIDAR LOGIN ------------------
-            const username = localStorage.getItem("username");
-            if (!username) {
-                window.location.href = 'login.html';
-                return;
-            }
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-            // ------------------ MONEDES ------------------
-            function updateCoinsDisplay() {
-                const monedas = localStorage.getItem("monedas") || 0;
-                $('#coins-display').text(`💰 ${monedas}`);
-            }
+<script>
+    $(document).ready(function() {
+        // 1. Verificar Sessió
+        let username = localStorage.getItem("username");
+        if (!username) {
+            window.location.href = "index.html"; // Redirigir si no hi ha login
+            return;
+        }
 
-            function loadCoinsFromBackend() {
-                $.ajax({
-                    type: 'GET',
-                    url: '/v1/shop/monedas/' + encodeURIComponent(username),
-                    dataType: 'json', // important: jQuery ja ens dona un objecte
-                    success: function(response) {
-                        // Backend retorna {"coins":1000}
-                        const monedas = response.coins;
-                        localStorage.setItem("monedas", monedas);
-                        updateCoinsDisplay();
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('Error obtenint monedes del backend:', textStatus, errorThrown);
-                        localStorage.setItem("monedas", 0);
-                        updateCoinsDisplay();
-                    }
-                });
-            }
+        // Actualitzar nom al menú
+        $('#username-display').text(username);
 
-            loadCoinsFromBackend(); // carreguem monedes reals del backend
+        // 2. Carregar Dades Inicials
+        loadUserCoins();
+        loadShopItems();
 
+        // --- FUNCIÓ 1: TANCAR SESSIÓ ---
+        $('#btn-logout').click(function(e) {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = "index.html"; // O login.html
+        });
 
-            // ------------------ INVENTARI ------------------
-            if (!localStorage.getItem("inventory")) {
-                localStorage.setItem("inventory", JSON.stringify({})); // objecte, no array
-            }
-
-            function addToInventory(item) {
-                const inv = JSON.parse(localStorage.getItem("inventory"));
-                const id = item.id;
-
-                if (!inv[id]) {
-                    inv[id] = {
-                        id: item.id,
-                        nombre: item.nombre,
-                        precio: item.precio,
-                        cantidad: 0
-                    };
+        // --- FUNCIÓ 2: CARREGAR MONEDES ---
+        function loadUserCoins() {
+            $.ajax({
+                type: 'GET',
+                url: '/v1/shop/monedas/' + username,
+                dataType: 'json',
+                success: function(response) {
+                    $('#coins-display').text(response.coins);
+                },
+                error: function() {
+                    console.log("Error carregant monedes");
                 }
+            });
+        }
 
-                inv[id].cantidad += 1;
-                localStorage.setItem("inventory", JSON.stringify(inv));
-            }
-
-
-            // ------------------ CARREGAR ITEMS ------------------
-
+        // --- FUNCIÓ 3: CARREGAR ITEMS (Amb el Fix de les Imatges) ---
+        function loadShopItems() {
             $.ajax({
                 type: 'GET',
                 url: '/v1/shop/items',
                 dataType: 'json',
                 success: function(items) {
-                    let shopItemsHtml = '';
+                    console.log("ITEMS REBUTS JSON:", items);
+                    let container = $('#shop-items-container');
+                    container.empty();
+
+                    if (!items || items.length === 0) {
+                        container.html('<h3 class="text-center text-muted">No hi ha items disponibles actualment.</h3>');
+                        return;
+                    }
+
                     items.forEach(function(item) {
-                        let img = "";
-                        if (item.id === 1) img = "img/booster_basic.png";
-                        if (item.id === 2) img = "img/neumaticos.png";
-                        shopItemsHtml += `
-                            <div class="col">
-                                <div class="card h-100 card-custom">
-                                <img src="${img}" class="card-img-top" alt="${item.nombre}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${item.nombre}</h5>
-                                        <p class="card-text">${item.descripcion}</p>
-                                        <p class="price-tag">${item.precio} Monedas</p>
-                                        <button class="btn btn-buy w-100"
-                                                data-item-id="${item.id}"
-                                                data-item-name="${item.nombre}"
-                                                data-item-price="${item.precio}">
-                                            Comprar
-                                        </button>
+                        // CORRECCIÓ DE RUTA D'IMATGE (Fix definitiu)
+                        let ruta = item.imagen;
+                        // Si no es URL absoluta (http) i no comença per /, li posem la barra
+                        if (!ruta.startsWith("http") && !ruta.startsWith("/")) {
+                            ruta = "/" + ruta;
+                        }
+                        let idReal = item.id || item.ID;
+                        if (!idReal) console.error("ALERTA: Aquest item no té ID!", item);
+                        let html = `
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100">
+                                        <div class="p-3 text-center" style="background-color: #222; border-bottom: 1px solid #444;">
+                                            <img src="${ruta}" class="img-fluid" alt="${item.nombre}"
+                                                 style="height: 180px; object-fit: contain;"
+                                                 onerror="this.src='https://placehold.co/200x200?text=No+Image';">
+                                        </div>
+                                        <div class="card-body d-flex flex-column text-center">
+                                            <h5 class="card-title text-gold fw-bold">${item.nombre}</h5>
+                                            <p class="card-text small text-secondary">${item.descripcion}</p>
+
+                                            <div class="mt-auto pt-3">
+                                                <h4 class="fw-bold mb-3">${item.precio} 💰</h4>
+                                                <button class="btn btn-buy w-100 py-2 rounded-pill shadow-sm btn-buy"
+                                                        data-item-id="${idReal}"
+                                                        data-item-price="${item.precio}"
+                                                        data-item-name="${item.nombre}">
+                                                    COMPRAR ARA
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>`;
+                            `;
+                        container.append(html);
                     });
-                    $('.row.g-4').html(shopItemsHtml);
                 },
-                error: function() {
-                    alert("Error al cargar los ítems de la tienda");
+                error: function(xhr) {
+                    console.error("Error carregant items:", xhr);
+                    $('#shop-items-container').html('<p class="text-danger text-center">Error connectant amb el servidor.</p>');
                 }
             });
+        }
 
-            // ------------------ COMPRAR ITEM ------------------
-            $(document).on('click', '.btn-buy', function() {
-                const itemId = $(this).data('item-id');
-                const itemName = $(this).data('item-name');
-                const itemPrice = parseInt($(this).data('item-price'));
-                let monedas = parseInt(localStorage.getItem("monedas"));
+        // --- FUNCIÓ 4: COMPRAR ITEM ---
+        $(document).on('click', '.btn-buy', function() {
+            const itemId = $(this).data('item-id');
+            const itemName = $(this).data('item-name');
+            const itemPrice = parseInt($(this).data('item-price'));
+            let currentCoins = parseInt($('#coins-display').text());
 
-                if (monedas < itemPrice) {
-                    alert("No tens suficients monedes!");
-                    return;
+            if (currentCoins < itemPrice) {
+                alert("⚠️ No tens suficients monedes per comprar " + itemName);
+                return;
+            }
+
+            // Confirmació simple
+            if(!confirm("Vols comprar " + itemName + " per " + itemPrice + " monedes?")) return;
+
+            $.ajax({
+                type: 'POST',
+                url: '/v1/shop/buy/' + itemId,
+                contentType: 'application/json',
+                data: JSON.stringify(username),
+                success: function(response) {
+                    alert("✅ Compra realitzada: " + itemName);
+                    loadUserCoins(); // Actualitzem saldo
+                },
+                error: function(xhr) {
+                    let errorMsg = "Error desconegut";
+                    if(xhr.responseJSON && xhr.responseJSON.message) errorMsg = xhr.responseJSON.message;
+                    alert("❌ Error en la compra: " + errorMsg);
                 }
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/v1/shop/buy/' + itemId,
-                    contentType: 'application/json',
-                    data: JSON.stringify(username), // envia "admin" com JSON string
-                    success: function(response) {
-                        // restem monedes al front
-                        monedas -= itemPrice;
-                        localStorage.setItem("monedas", monedas);
-                        updateCoinsDisplay();
-
-                        addToInventory({ id: itemId, nombre: itemName, precio: itemPrice });
-
-                        alert('¡Has comprado: ' + itemName + '!');
-                    },
-                    error: function(jqXHR) {
-                        alert("Error al comprar el artículo:\n" + jqXHR.responseText);
-                    }
-                });
             });
-
         });
-
-    </script>
-
+    });
+</script>
 </body>
 </html>

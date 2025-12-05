@@ -1,18 +1,23 @@
 package services;
 
-import database.models.Item;
-import database.models.Usuario;
+
+import db.orm.model.Item;
+import db.orm.model.Usuario;
+
 import manager.ShopManagerImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import services.DTOs.CoinsResponse;
+import services.DTOs.MessageResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+
 
 @Api(value = "/shop", description = "Servicios de la tienda de items")
 @Path("/shop")
@@ -38,150 +43,72 @@ public class ShopService {
     }
 
     @POST
-    @Path("/buy/{id}")
-    @ApiOperation(
-            value = "Comprar un item de la tienda",
-            notes = "Permite a un usuario comprar un item específico por su ID."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Item comprado correctamente"),
-            @ApiResponse(code = 404, message = "Item o usuario no encontrado", response = String.class),
-            @ApiResponse(code = 500, message = "Error interno del servidor", response = String.class)
-    })
+    @Path("/buy/{itemId}")
+    @ApiOperation(value = "Comprar un item")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response comprarItem(@PathParam("id") Integer itemId, String username) {
-        try {
-            if (username != null) {
-                username = username.replace("\"", "").trim();
-            }
+    public Response buyItem(@PathParam("itemId") int itemId, String username) {
+        if (username != null) username = username.replace("\"", "").trim();
 
+        try {
             shopManager.comprarItem(username, itemId);
-            return Response.status(Response.Status.OK)
-                    .entity("{\"message\": \"Item comprado correctamente\"}")
-                    .build();
+
+            // Retornem un objecte missatge net
+            return Response.status(200).entity(new MessageResponse("Compra realitzada amb èxit")).build();
+
         } catch (RuntimeException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\": \"" + e.getMessage() + "\"}")
-                    .build();
+            return Response.status(409).entity(new MessageResponse(e.getMessage())).build();
         }
     }
     @GET
     @Path("/monedas/{username}")
-    @ApiOperation(
-            value = "Devuelve las monoedas que tiene un usuario",
-            notes = "Devuelve las monedas que tiene un usuaria especificando su ursername"
-    )
+    @ApiOperation(value = "Obtenir monedes de l'usuari")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCoins(@PathParam("username") String username) {
+        if (username != null) username = username.replace("\"", "").trim();
 
-        username = username.replace("\"", "").trim();
-
-        int monedas = this.shopManager.getMonedas(username);
+        int monedas = shopManager.getMonedas(username);
 
         if (monedas < 0) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Monedas insuficientes de : " + username + "\"}" + monedas).build();
+            return Response.status(404).entity(new MessageResponse("Usuari no trobat")).build();
         }
 
-        return Response.ok("{\"coins\":" + monedas + "}").build();
+        return Response.ok(new CoinsResponse(monedas)).build();
     }
-//    @GET
-//    @Path("/perfil/{username}")
-//    @ApiOperation(
-//            value = "Devuelve perfil usuario",
-//            notes = "Devuelve perfil usuario en funcion de id"
-//    )
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getPerfil(@PathParam("username") String usernameJson) {
-//
-//        usernameJson = usernameJson.replace("\"", "").trim();
-//        Usuario u = shopManager.getPerfil(usernameJson);
-//
-//        if (u == null) {
-//            return Response.status(Response.Status.NOT_FOUND)
-//                    .entity("{\"error\":\"Usuario no encontrado: " + usernameJson + "\"}")
-//                    .build();
-//        }
-//
-//        String json = String.format(
-//                "{" +
-//                        "\"username\":\"%s\"," +
-//                        "\"nombre\":\"%s\"," +
-//                        "\"apellido\":\"%s\"," +
-//                        "\"email\":\"%s\"," +
-//                        "\"monedas\":%d," +
-//                        "\"mejorPuntuacion\":%d" +
-//                        "}",
-//                u.getUsername(),
-//                u.getNombre(),
-//                u.getApellido(),
-//                u.getEmail(),
-//                u.getMonedas(),
-//                u.getMejorPuntuacion()
-//        );
-//
-//        return Response.ok(json).build();
-//    }
-@GET
-@Path("/perfil/{username}")
-@ApiOperation(
-        value = "Devuelve perfil usuario",
-        notes = "Devuelve el objeto completo del usuario buscando por su username"
-)
-@ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Perfil encontrado", response = Usuario.class),
-        @ApiResponse(code = 404, message = "Usuario no encontrado", response = String.class)
-})
-@Produces(MediaType.APPLICATION_JSON)
-public Response getPerfil(@PathParam("username") String username) {
+    @GET
+    @Path("/perfil/{username}")
+    @ApiOperation(value = "Obtenir perfil d'usuari")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPerfil(@PathParam("username") String username) {
+        Usuario u = shopManager.getPerfil(username);
+        System.out.println("Buscant perfil amb usuari " + u.getUsername());
+        if (u != null) {
 
-    // Limpiamos el username por si llega con comillas extrañas
-    String cleanUsername = username.replace("\"", "").trim();
-
-    Usuario u = shopManager.getPerfil(cleanUsername);
-
-    if (u == null) {
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity("{\"error\":\"Usuario no encontrado: " + cleanUsername + "\"}")
-                .build();
+            return Response.status(200).entity(u).build();
+        } else {
+            return Response.status(404).entity("Usuari no trobat").build();
+        }
     }
-
-    // ¡ESTA ES LA CLAVE!
-    // Pasamos el objeto 'u' directamente y Jersey crea el JSON perfecto por ti.
-    return Response.status(Response.Status.OK).entity(u).build();
-}
-
     @GET
     @Path("/ranking")
+    @ApiOperation(value = "Obtenir ranking")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRanking() {
-
-        // agafem la llista ordenada des del manager
-        List<Usuario> usuarios = shopManager.getRanking();
-
-        // construïm el JSON manualment: [ { ... }, { ... } ]
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-
-        for (int i = 0; i < usuarios.size(); i++) {
-            Usuario u = usuarios.get(i);
-
-            sb.append("{")
-                    .append("\"username\":\"").append(u.getUsername()).append("\",")
-                    .append("\"nombre\":\"").append(u.getNombre()).append("\",")
-                    .append("\"mejorPuntuacion\":").append(u.getMejorPuntuacion())
-                    .append("}");
-
-            if (i < usuarios.size() - 1) {
-                sb.append(",");
-            }
-        }
-
-        sb.append("]");
-
-        return Response.ok(sb.toString()).build();
+        List<Usuario> ranking = shopManager.getRanking();
+        GenericEntity<List<Usuario>> entity = new GenericEntity<List<Usuario>>(ranking) {};
+        return Response.status(200).entity(entity).build();
     }
-
+    @GET
+    @Path("/inventario/{username}")
+    @ApiOperation(value = "Obtenir inventari d'un usuari")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getInventario(@PathParam("username") String username) {
+        List<Item> inventory = shopManager.getItemByUsuario(username);
+        if (inventory == null) {
+            return Response.status(404).entity(new MessageResponse("Usuari no trobat")).build();
+        }
+        GenericEntity<List<Item>> entity = new GenericEntity<List<Item>>(inventory) {};
+        return Response.status(200).entity(entity).build();
+    }
 }
 

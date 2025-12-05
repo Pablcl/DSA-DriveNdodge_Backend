@@ -1,29 +1,35 @@
-package database.models;
+package db.orm.model;
+
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 public class Usuario {
+    private int ID;
     private String username;
     private String password;
     private String nombre;
     private String apellido;
-    private String email;
+    private String gmail;
     private String fechaNacimiento;
     private int monedas;
     private int mejorPuntuacion;
     public Usuario() {
-        this.monedas=1000;
+
     }
 
-    public Usuario(String username, String password, String nombre, String apellido, String email, String fechaNacimiento) {
+    public Usuario(int ID, String username, String password,  String nombre, String apellido, String gmail, String fechaNacimiento) {
+        this.ID = ID;
         this.username = username;
         this.password = password;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.email = email;
+        this.gmail = gmail;
         this.fechaNacimiento = fechaNacimiento;
-        this.monedas = 1000;
+        this.monedas = this.monedas;
         this.mejorPuntuacion = 0;
     }
-
+    public int getId() {return ID;}
+    public void setId(int id) {this.ID = ID;}
     public String getUsername() {
         return username;
     }
@@ -56,12 +62,12 @@ public class Usuario {
         this.apellido = apellido;
     }
 
-    public String getEmail() {
-        return email;
+    public String getGmail() {
+        return gmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGmail(String gmail) {
+        this.gmail = gmail;
     }
 
     public String getFechaNacimiento() {
@@ -71,7 +77,7 @@ public class Usuario {
     public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-        public int getMonedas() {
+    public int getMonedas() {
         return monedas;
     }
 

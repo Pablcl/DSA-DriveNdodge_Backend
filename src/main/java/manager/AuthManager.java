@@ -1,6 +1,8 @@
 package manager;
 
-import database.models.Usuario;
+
+import db.orm.model.Usuario;
+
 import java.util.List;
 
 public interface AuthManager {
