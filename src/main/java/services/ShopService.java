@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import services.DTOs.CoinsResponse;
+import services.DTOs.ItemInventario;
 import services.DTOs.MessageResponse;
 
 import javax.ws.rs.*;
@@ -103,11 +104,11 @@ public class ShopService {
     @ApiOperation(value = "Obtenir inventari d'un usuari")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInventario(@PathParam("username") String username) {
-        List<Item> inventory = shopManager.getItemByUsuario(username);
+        List<ItemInventario> inventory = shopManager.getItemByUsuario(username);
         if (inventory == null) {
             return Response.status(404).entity(new MessageResponse("Usuari no trobat")).build();
         }
-        GenericEntity<List<Item>> entity = new GenericEntity<List<Item>>(inventory) {};
+        GenericEntity<List<ItemInventario>> entity = new GenericEntity<List<ItemInventario>>(inventory) {};
         return Response.status(200).entity(entity).build();
     }
 }

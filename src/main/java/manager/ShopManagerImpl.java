@@ -10,9 +10,12 @@ import db.orm.model.Item;
 import db.orm.model.Usuario;
 
 import org.apache.log4j.Logger;
+import services.DTOs.ItemInventario;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShopManagerImpl implements ShopManager {
     private static final Logger LOGGER = Logger.getLogger(ShopManagerImpl.class);
@@ -90,21 +93,29 @@ public class ShopManagerImpl implements ShopManager {
         List<Usuario> ranking = usuarioDAO.getUsuariosRanking();
         return ranking;
     }
-    public List<Item> getItemByUsuario(String username){
+    public List<ItemInventario> getItemByUsuario(String username) {
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
-        LOGGER.info("Obtingent items de inventari de: " + u.getUsername());
         if (u == null) return null;
+
         List<Inventario> inventarioList = this.inventarioDAO.getInventario(u.getId());
-        List<Item> itemList = new ArrayList<>();
-        if(inventarioList != null){
-            for(Inventario inventario : inventarioList){
-                Item item = itemDAO.getItem(inventario.getItemId());
-                if(inventarioList != null){
-                    itemList.add(item);
-                    LOGGER.info("Item en inventario encontrado " + item.getNombre());
+
+        // Usamos un Mapa para contar: Clave=ID del Item, Valor=Objeto ItemInventario
+        Map<Integer, ItemInventario> contador = new HashMap<>();
+
+        if (inventarioList != null) {
+            for (Inventario inv : inventarioList) {
+                Item item = itemDAO.getItem(inv.getItemId());
+                if (item != null) {
+                    if (contador.containsKey(item.getId())) {
+                        ItemInventario existente = contador.get(item.getId());
+                        existente.setCantidad(existente.getCantidad() + 1);
+                    } else {
+                        contador.put(item.getId(), new ItemInventario(item, 1));
+                    }
                 }
             }
-        }return itemList;
+        }
+        return new ArrayList<>(contador.values());
     }
 
 
