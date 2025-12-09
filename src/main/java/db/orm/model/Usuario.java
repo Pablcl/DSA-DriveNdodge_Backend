@@ -14,7 +14,7 @@ public class Usuario {
     private int monedas;
     private int mejorPuntuacion;
     public Usuario() {
-
+        this.monedas = 1000;
     }
 
     public Usuario(int ID, String username, String password,  String nombre, String apellido, String email, String fechaNacimiento) {
@@ -25,7 +25,6 @@ public class Usuario {
         this.apellido = apellido;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
-        this.monedas = this.monedas;
         this.mejorPuntuacion = 0;
     }
     public int getId() {return ID;}
