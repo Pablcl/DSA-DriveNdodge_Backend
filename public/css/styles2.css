@@ -505,3 +505,35 @@ body.clean-background2 {
 
 
 
+/* FONS BASE DEL TOAST: gris fosc sempre */
+.toast {
+    background-color: #222 !important;
+    color: #fff !important;
+    border: 3px solid #555; /* valor per defecte */
+    font-family: "VT323", monospace !important;
+    font-size: 20px !important;
+}
+
+/* TIPUS: només canvia el color del borde */
+.toast-success {
+    border-color: #2ecc71 !important; /* verd */
+}
+
+.toast-warning {
+    border-color: #f1c40f !important; /* groc */
+}
+
+.toast-danger {
+    border-color: #e74c3c !important; /* vermell */
+}
+
+.toast-info {
+    border-color: #3498db !important; /* blau (opcional) */
+}
+
+/* Icona de tancar blanca */
+.btn-close-white {
+    filter: invert(1);
+}
+
+
