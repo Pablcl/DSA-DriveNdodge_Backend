@@ -2,7 +2,7 @@ package services.DTOs;
 
 import db.orm.model.Item;
 
-public class ItemInventario {
+public class ItemInventarioDTO {
     private int id;
     private String nombre;
     private String descripcion;
@@ -10,9 +10,9 @@ public class ItemInventario {
     private String imagen;
     private int cantidad;
 
-    public ItemInventario() {}
+    public ItemInventarioDTO() {}
 
-    public ItemInventario(Item item, int cantidad) {
+    public ItemInventarioDTO(Item item, int cantidad) {
         this.id = item.getId();
         this.nombre = item.getNombre();
         this.descripcion = item.getDescripcion();

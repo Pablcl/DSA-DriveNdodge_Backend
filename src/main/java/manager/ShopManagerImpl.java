@@ -10,7 +10,7 @@ import db.orm.model.Item;
 import db.orm.model.Usuario;
 
 import org.apache.log4j.Logger;
-import services.DTOs.ItemInventario;
+import services.DTOs.ItemInventarioDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,24 +110,24 @@ public class ShopManagerImpl implements ShopManager {
     }
 
     @Override
-    public List<ItemInventario> getItemByUsuario(String username) {
+    public List<ItemInventarioDTO> getItemByUsuario(String username) {
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
         if (u == null) return null;
 
         List<Inventario> inventarioList = this.inventarioDAO.getInventario(u.getId());
 
         // Usamos un Mapa para contar: Clave=ID del Item, Valor=Objeto ItemInventario
-        Map<Integer, ItemInventario> contador = new HashMap<>();
+        Map<Integer, ItemInventarioDTO> contador = new HashMap<>();
 
         if (inventarioList != null) {
             for (Inventario inv : inventarioList) {
                 Item item = itemDAO.getItem(inv.getItemId());
                 if (item != null) {
                     if (contador.containsKey(item.getId())) {
-                        ItemInventario existente = contador.get(item.getId());
+                        ItemInventarioDTO existente = contador.get(item.getId());
                         existente.setCantidad(existente.getCantidad() + 1);
                     } else {
-                        contador.put(item.getId(), new ItemInventario(item, 1));
+                        contador.put(item.getId(), new ItemInventarioDTO(item, 1));
                     }
                 }
             }

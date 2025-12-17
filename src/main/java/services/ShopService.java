@@ -9,9 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import services.DTOs.CoinsResponse;
-import services.DTOs.ItemInventario;
-import services.DTOs.MessageResponse;
+import services.DTOs.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -115,7 +113,7 @@ public class ShopService {
     @Path("/perfil/{username}")
     @ApiOperation(value = "Obtener perfil usuario")
     @ApiResponses( value = {
-            @ApiResponse(code = 200, message = "Obtener perfil usuario con exito", response = Usuario.class),
+            @ApiResponse(code = 200, message = "Obtener perfil usuario con exito", response = UsuarioPerfilDTO.class),
             @ApiResponse(code = 404, message = "Usuario no encontrado", response = MessageResponse.class),
             @ApiResponse(code = 400, message = "Username inválido", response = MessageResponse.class)
 
@@ -132,8 +130,9 @@ public class ShopService {
 
         try{
             Usuario u = shopManager.getPerfil(username);
+            UsuarioPerfilDTO dto = new UsuarioPerfilDTO(u);
             return Response.status(Response.Status.OK)
-                    .entity(u)
+                    .entity(dto)
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.NOT_FOUND)
@@ -147,12 +146,18 @@ public class ShopService {
     @Path("/ranking")
     @ApiOperation(value = "Obtener ranking")
     @ApiResponses( value = {
-            @ApiResponse(code = 200, message = "Obtener ranking con exito", response = Usuario.class, responseContainer = "List")
+            @ApiResponse(code = 200, message = "Obtener ranking con exito", response = UsuariosRankingDTO.class, responseContainer = "List")
     })
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRanking() {
         List<Usuario> ranking = shopManager.getRanking();
-        GenericEntity<List<Usuario>> entity = new GenericEntity<List<Usuario>>(ranking) {};
+
+        List<UsuariosRankingDTO> dtoList = new java.util.ArrayList<>();
+        for (Usuario u : ranking) {
+            dtoList.add(new UsuariosRankingDTO(u));
+        }
+
+        GenericEntity<List<UsuariosRankingDTO>> entity = new GenericEntity<List<UsuariosRankingDTO>>(dtoList) {};
         return Response.status(Response.Status.OK)
                 .entity(entity)
                 .build();
@@ -163,7 +168,7 @@ public class ShopService {
     @Path("/inventario/{username}")
     @ApiOperation(value = "Obtener inventario usuari")
     @ApiResponses( value = {
-            @ApiResponse(code = 200, message = "Obtener inventario usuario con exito", response = ItemInventario.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "Obtener inventario usuario con exito", response = ItemInventarioDTO.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Usuario no econtrado", response = MessageResponse.class),
             @ApiResponse(code = 400, message = "Username inválido", response = MessageResponse.class)
 
@@ -179,8 +184,8 @@ public class ShopService {
         username = username.replace("\"", "").trim();
 
         try{
-            List<ItemInventario> inventory = shopManager.getItemByUsuario(username);
-            GenericEntity<List<ItemInventario>> entity = new GenericEntity<List<ItemInventario>>(inventory) {};
+            List<ItemInventarioDTO> inventory = shopManager.getItemByUsuario(username);
+            GenericEntity<List<ItemInventarioDTO>> entity = new GenericEntity<List<ItemInventarioDTO>>(inventory) {};
             return Response.status(Response.Status.OK)
                     .entity(entity)
                     .build();

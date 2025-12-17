@@ -4,7 +4,7 @@ package manager;
 
 import db.orm.model.Item;
 import db.orm.model.Usuario;
-import services.DTOs.ItemInventario;
+import services.DTOs.ItemInventarioDTO;
 
 import java.util.List;
 
@@ -14,6 +14,6 @@ public interface ShopManager {
     int getMonedas(String username);
     Usuario getPerfil(String username);
     List<Usuario> getRanking();
-    List<ItemInventario> getItemByUsuario(String username);
+    List<ItemInventarioDTO> getItemByUsuario(String username);
 }
 
