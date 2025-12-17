@@ -34,82 +34,163 @@ public class ShopService {
     @Path("/items")
     @ApiOperation(value = "Obtener todos los items de la tienda")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Item.class, responseContainer = "List")
+            @ApiResponse(code = 200, message = "Obtener items tienda con exito", response = Item.class, responseContainer = "List")
     })
     @Produces(MediaType.APPLICATION_JSON)
     public Response getItems() {
         List<Item> items = shopManager.getItemsTienda();
         GenericEntity<List<Item>> entity = new GenericEntity<List<Item>>(items) {};
-        return Response.status(200).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .entity(entity)
+                .build();
     }
 
     @POST
     @Path("/buy/{itemId}")
     @ApiOperation(value = "Comprar un item")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Compra realizada con exito", response = MessageResponse.class),
+            @ApiResponse(code = 409, message = "Error en la compra", response = MessageResponse.class),
+            @ApiResponse(code = 400, message = "Username inválido", response = MessageResponse.class)
+
+    })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response buyItem(@PathParam("itemId") int itemId, String username) {
-        if (username != null) username = username.replace("\"", "").trim();
+
+        if (username == null || username.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageResponse("Username inválido"))
+                    .build();
+        }
+        username = username.replace("\"", "").trim();
 
         try {
             shopManager.comprarItem(username, itemId);
-
-            // Retornem un objecte missatge net
-            return Response.status(200).entity(new MessageResponse("Compra realitzada amb èxit")).build();
+            return Response.status(Response.Status.OK)
+                    .entity(new MessageResponse("Compra realizada con exito"))
+                    .build();
 
         } catch (RuntimeException e) {
-            return Response.status(409).entity(new MessageResponse(e.getMessage())).build();
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(new MessageResponse(e.getMessage()))
+                    .build();
         }
     }
+
+
     @GET
     @Path("/monedas/{username}")
-    @ApiOperation(value = "Obtenir monedes de l'usuari")
+    @ApiOperation(value = "Obtener monedas del usuario")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Obtener monedas usuario con exito", response = CoinsResponse.class),
+            @ApiResponse(code = 404, message = "Usuario no encontrado", response = MessageResponse.class),
+            @ApiResponse(code = 400, message = "Username inválido", response = MessageResponse.class)
+
+    })
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCoins(@PathParam("username") String username) {
-        if (username != null) username = username.replace("\"", "").trim();
 
-        int monedas = shopManager.getMonedas(username);
-
-        if (monedas < 0) {
-            return Response.status(404).entity(new MessageResponse("Usuari no trobat")).build();
+        if (username == null || username.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageResponse("Username inválido"))
+                    .build();
         }
+        username = username.replace("\"", "").trim();
 
-        return Response.ok(new CoinsResponse(monedas)).build();
+        try{
+            int monedas = shopManager.getMonedas(username);
+            return Response.status(Response.Status.OK)
+                    .entity(new CoinsResponse(monedas))
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new MessageResponse(e.getMessage()))
+                    .build();
+        }
     }
+
+
     @GET
     @Path("/perfil/{username}")
-    @ApiOperation(value = "Obtenir perfil d'usuari")
+    @ApiOperation(value = "Obtener perfil usuario")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200, message = "Obtener perfil usuario con exito", response = Usuario.class),
+            @ApiResponse(code = 404, message = "Usuario no encontrado", response = MessageResponse.class),
+            @ApiResponse(code = 400, message = "Username inválido", response = MessageResponse.class)
+
+    })
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPerfil(@PathParam("username") String username) {
-        Usuario u = shopManager.getPerfil(username);
-        System.out.println("Buscant perfil amb usuari " + u.getUsername());
-        if (u != null) {
 
-            return Response.status(200).entity(u).build();
-        } else {
-            return Response.status(404).entity("Usuari no trobat").build();
+        if (username == null || username.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageResponse("Username inválido"))
+                    .build();
+        }
+        username = username.replace("\"", "").trim();
+
+        try{
+            Usuario u = shopManager.getPerfil(username);
+            return Response.status(Response.Status.OK)
+                    .entity(u)
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new MessageResponse(e.getMessage()))
+                    .build();
         }
     }
+
+
     @GET
     @Path("/ranking")
-    @ApiOperation(value = "Obtenir ranking")
+    @ApiOperation(value = "Obtener ranking")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200, message = "Obtener ranking con exito", response = Usuario.class, responseContainer = "List")
+    })
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRanking() {
         List<Usuario> ranking = shopManager.getRanking();
         GenericEntity<List<Usuario>> entity = new GenericEntity<List<Usuario>>(ranking) {};
-        return Response.status(200).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .entity(entity)
+                .build();
     }
+
+
     @GET
     @Path("/inventario/{username}")
-    @ApiOperation(value = "Obtenir inventari d'un usuari")
+    @ApiOperation(value = "Obtener inventario usuari")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200, message = "Obtener inventario usuario con exito", response = ItemInventario.class, responseContainer = "List"),
+            @ApiResponse(code = 404, message = "Usuario no econtrado", response = MessageResponse.class),
+            @ApiResponse(code = 400, message = "Username inválido", response = MessageResponse.class)
+
+    })
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInventario(@PathParam("username") String username) {
-        List<ItemInventario> inventory = shopManager.getItemByUsuario(username);
-        if (inventory == null) {
-            return Response.status(404).entity(new MessageResponse("Usuari no trobat")).build();
+
+        if (username == null || username.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageResponse("Username inválido"))
+                    .build();
         }
-        GenericEntity<List<ItemInventario>> entity = new GenericEntity<List<ItemInventario>>(inventory) {};
-        return Response.status(200).entity(entity).build();
+        username = username.replace("\"", "").trim();
+
+        try{
+            List<ItemInventario> inventory = shopManager.getItemByUsuario(username);
+            GenericEntity<List<ItemInventario>> entity = new GenericEntity<List<ItemInventario>>(inventory) {};
+            return Response.status(Response.Status.OK)
+                    .entity(entity)
+                    .build();
+
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new MessageResponse(e.getMessage()))
+                    .build();
+        }
+
     }
 }
 

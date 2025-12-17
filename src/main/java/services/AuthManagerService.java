@@ -7,7 +7,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import services.DTOs.MessageResponse;
 
+import javax.annotation.processing.Messager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,7 +34,7 @@ public class AuthManagerService {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Usuario registrado correctamente", response = Usuario.class),
-            @ApiResponse(code = 400, message = "El usuario ya existe", response = String.class)
+            @ApiResponse(code = 400, message = "El usuario ya existe", response = MessageResponse.class)
     })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,7 +59,7 @@ public class AuthManagerService {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Inicio de sesión exitoso", response = Usuario.class),
-            @ApiResponse(code = 401, message = "Usuario o contraseña incorrectos", response = String.class)
+            @ApiResponse(code = 401, message = "Usuario o contraseña incorrectos", response = MessageResponse.class)
     })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -69,7 +71,7 @@ public class AuthManagerService {
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("Error: " + e.getMessage())
+                    .entity(new MessageResponse(e.getMessage()))
                     .build();
         }
     }

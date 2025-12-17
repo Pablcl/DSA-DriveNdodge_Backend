@@ -66,33 +66,50 @@ public class ShopManagerImpl implements ShopManager {
         Inventario inventario = new Inventario(usuario.getId(), item.getId());
         inventarioDAO.addInventario(inventario);
         LOGGER.info("Usuario '" + username + "' ha comprado el item: " + item);
-
-
     }
+
+
     @Override
     public int getMonedas(String username) {
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
+
+        if (u == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
         LOGGER.info("monedas:"+ u.getMonedas());
-        if (u == null) return -1;
         return u.getMonedas();
     }
+
+
     @Override
     public Usuario getPerfil(String username){
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
+
+        if (u == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
         LOGGER.info("Obtenint perfil de: " + u.getEmail());
         return u;
     }
 
-    public int getMejorPuntuacion(String username) {
-        Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
-        if (u == null) return -1;
-        return u.getMejorPuntuacion();
-    }
     @Override
     public List<Usuario> getRanking() {
         List<Usuario> ranking = usuarioDAO.getUsuariosRanking();
         return ranking;
     }
+
+
+    public int getMejorPuntuacion(String username) {
+        Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
+        if (u == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        return u.getMejorPuntuacion();
+    }
+
+    @Override
     public List<ItemInventario> getItemByUsuario(String username) {
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
         if (u == null) return null;
