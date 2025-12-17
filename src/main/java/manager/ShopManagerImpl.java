@@ -82,25 +82,6 @@ public class ShopManagerImpl implements ShopManager {
     }
 
 
-    @Override
-    public Usuario getPerfil(String username){
-        Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
-
-        if (u == null) {
-            throw new RuntimeException("Usuario no encontrado");
-        }
-
-        LOGGER.info("Obtenint perfil de: " + u.getEmail());
-        return u;
-    }
-
-    @Override
-    public List<Usuario> getRanking() {
-        List<Usuario> ranking = usuarioDAO.getUsuariosRanking();
-        return ranking;
-    }
-
-
     public int getMejorPuntuacion(String username) {
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
         if (u == null) {

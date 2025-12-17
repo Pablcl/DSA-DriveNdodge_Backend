@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import services.DTOs.MessageResponse;
 
-import javax.annotation.processing.Messager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -18,11 +17,11 @@ import java.util.List;
 
 @Api(value = "/auth", description = "Servicios de autenticación de usuarios")
 @Path("/auth")
-public class AuthManagerService {
+public class AuthService {
 
     private final AuthManagerImpl am;
 
-    public AuthManagerService() {
+    public AuthService() {
         this.am = AuthManagerImpl.getInstance();
     }
 

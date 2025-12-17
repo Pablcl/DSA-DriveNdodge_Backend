@@ -147,7 +147,7 @@
         // Cargar datos del perfil desde el backend
         $.ajax({
             type: "GET",
-            url: "/v1/shop/perfil/" + encodeURIComponent(username),
+            url: "/v1/perfil/" + encodeURIComponent(username),
             dataType: "json",
             success: function(data) {
                 $("#p-username").text(data.username);

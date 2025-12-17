@@ -110,61 +110,6 @@ public class ShopService {
 
 
     @GET
-    @Path("/perfil/{username}")
-    @ApiOperation(value = "Obtener perfil usuario")
-    @ApiResponses( value = {
-            @ApiResponse(code = 200, message = "Obtener perfil usuario con exito", response = UsuarioPerfilDTO.class),
-            @ApiResponse(code = 404, message = "Usuario no encontrado", response = MessageResponse.class),
-            @ApiResponse(code = 400, message = "Username inválido", response = MessageResponse.class)
-
-    })
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPerfil(@PathParam("username") String username) {
-
-        if (username == null || username.trim().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new MessageResponse("Username inválido"))
-                    .build();
-        }
-        username = username.replace("\"", "").trim();
-
-        try{
-            Usuario u = shopManager.getPerfil(username);
-            UsuarioPerfilDTO dto = new UsuarioPerfilDTO(u);
-            return Response.status(Response.Status.OK)
-                    .entity(dto)
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(new MessageResponse(e.getMessage()))
-                    .build();
-        }
-    }
-
-
-    @GET
-    @Path("/ranking")
-    @ApiOperation(value = "Obtener ranking")
-    @ApiResponses( value = {
-            @ApiResponse(code = 200, message = "Obtener ranking con exito", response = UsuariosRankingDTO.class, responseContainer = "List")
-    })
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRanking() {
-        List<Usuario> ranking = shopManager.getRanking();
-
-        List<UsuariosRankingDTO> dtoList = new java.util.ArrayList<>();
-        for (Usuario u : ranking) {
-            dtoList.add(new UsuariosRankingDTO(u));
-        }
-
-        GenericEntity<List<UsuariosRankingDTO>> entity = new GenericEntity<List<UsuariosRankingDTO>>(dtoList) {};
-        return Response.status(Response.Status.OK)
-                .entity(entity)
-                .build();
-    }
-
-
-    @GET
     @Path("/inventario/{username}")
     @ApiOperation(value = "Obtener inventario usuari")
     @ApiResponses( value = {

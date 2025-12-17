@@ -12,8 +12,6 @@ public interface ShopManager {
     List<Item> getItemsTienda();
     void comprarItem(String username, int itemId);
     int getMonedas(String username);
-    Usuario getPerfil(String username);
-    List<Usuario> getRanking();
     List<ItemInventarioDTO> getItemByUsuario(String username);
 }
 
