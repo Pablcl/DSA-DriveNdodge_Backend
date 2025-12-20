@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - DriveNdodge</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/edit_profile.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="edit-profile-page">
+
+<div class="card-container">
+    <h1>EDITAR DATOS</h1>
+
+    <label for="nombre">NOMBRE</label>
+    <input type="text" id="nombre" placeholder="Tu nombre">
+
+    <label for="apellido">APELLIDO</label>
+    <input type="text" id="apellido" placeholder="Tu apellido">
+
+    <label for="email">EMAIL</label>
+    <input type="email" id="email" placeholder="correo@ejemplo.com">
+
+    <label for="fecha">FECHA NACIMIENTO</label>
+    <input type="date" id="fecha">
+
+    <button class="btn btn-save" id="btnGuardar">GUARDAR CAMBIOS</button>
+    <button class="btn btn-cancel" id="btnCancelar">CANCELAR</button>
+</div>
+
+<script src="js/edit_profile.js"></script>
+</body>
+</html>

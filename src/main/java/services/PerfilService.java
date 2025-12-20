@@ -10,10 +10,7 @@ import manager.ShopManagerImpl;
 import services.DTOs.MessageResponse;
 import services.DTOs.UsuarioPerfilDTO;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -57,5 +54,34 @@ public class PerfilService {
                     .entity(new MessageResponse(e.getMessage()))
                     .build();
         }
+    }
+    @PUT
+    @Path("/{username}")
+    @ApiOperation(value = "Actualizar perfil de usuario")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Exito", response = UsuarioPerfilDTO.class),
+            @ApiResponse(code = 404, message = "Usuario no encontrado")
+    })
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePerfil(@PathParam("username") String username, UsuarioPerfilDTO usuarioDTO) {
+
+        if (usuarioDTO == null) {
+            return Response.status(400).entity(new MessageResponse("Datos vacíos")).build();
+        }
+
+        Usuario u = perfilManager.updatePerfil(
+                username,
+                usuarioDTO.getNombre(),
+                usuarioDTO.getApellido(),
+                usuarioDTO.getEmail(),
+                usuarioDTO.getFechaNacimiento()
+        );
+
+        if (u == null) {
+            return Response.status(404).build();
+        }
+
+        return Response.status(201).entity(new UsuarioPerfilDTO(u)).build();
     }
 }

@@ -36,4 +36,18 @@ public class PerfilManagerImpl implements PerfilManager {
         LOGGER.info("Obtenint perfil de: " + u.getEmail());
         return u;
     }
+
+    public Usuario updatePerfil(String username, String nombre, String apellido, String email, String fechaNacimiento) {
+        Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
+        if (u != null) {
+            u.setNombre(nombre);
+            u.setApellido(apellido);
+            u.setEmail(email);
+            u.setFechaNacimiento(fechaNacimiento);
+
+            this.usuarioDAO.updateUsuario(u);
+        }
+        return u;
+    }
+
 }
