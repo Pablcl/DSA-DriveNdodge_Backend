@@ -18,4 +18,5 @@ public interface IUsuarioDAO {
     public List <Usuario> getUsuarioByDept(int ID);
     public Usuario getUsuarioByUsername(String username);
     List<Usuario> getUsuariosRanking();
+    public Usuario getUsuarioByCred(String username, String password);
 }

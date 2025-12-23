@@ -23,7 +23,13 @@ public class QueryHelper {
         sb.append(") VALUES (0");
 
         for (String field: fields) {
-            if (!field.equals("ID"))  sb.append(", ?");
+            if (!field.equalsIgnoreCase("ID")) {
+                if (field.equalsIgnoreCase("password")) {
+                    sb.append(", SHA2(?, 256)");
+                } else {
+                    sb.append(", ?");
+                }
+            }
         }
         sb.append(")");
         // INSERT INTO User (ID, lastName, firstName, address, city) VALUES (0, ?, ?, ?,?)
@@ -73,5 +79,11 @@ public class QueryHelper {
         query.append("SELECT * FROM ").append(theClass.getSimpleName());
         query.append(" ORDER BY ").append(ordenateByField).append(" DESC");
         return query.toString();
+    }
+    public static String createSelectByCred(Class theClass) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
+        sb.append(" WHERE username = ? AND password = SHA2(?, 256)");
+        return sb.toString();
     }
 }

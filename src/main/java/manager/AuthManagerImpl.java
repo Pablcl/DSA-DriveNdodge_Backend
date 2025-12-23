@@ -119,7 +119,7 @@ public class AuthManagerImpl implements AuthManager {
         // --- LOG DE DEPURACIÓN ---
         LOGGER.info("Intento de login para username: '" + usuario.getUsername() + "' con password: '" + usuario.getPassword() + "'");
 
-        Usuario usuarioExistent = userDAO.getUsuarioByUsername(usuario.getUsername());
+        Usuario usuarioExistent = userDAO.getUsuarioByCred(usuario.getUsername(), usuario.getPassword());
 
         if (usuarioExistent != null) {
             LOGGER.info("Usuario encontrado en BD: '" + usuarioExistent.getUsername() + "' con password en BD: '" + usuarioExistent.getPassword() + "'");
@@ -127,7 +127,7 @@ public class AuthManagerImpl implements AuthManager {
             LOGGER.warn("Usuario '" + usuario.getUsername() + "' NO encontrado en la base de datos.");
         }
 
-        if (usuarioExistent == null || !usuarioExistent.getPassword().equals(usuario.getPassword())) {
+        if (usuarioExistent == null) {
             LOGGER.error("FALLO en la comparación de contraseñas para el usuario: " + usuario.getUsername());
             throw new RuntimeException("Usuario o contraseña incorrectos");
         }

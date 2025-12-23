@@ -136,4 +136,26 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
         // Implementación pendiente
         return null;
     }
+    public Usuario getUsuarioByCred(String username, String password) {
+        Session session = FactorySession.openSession();
+        Usuario usuario = null;
+        try {
+            String sql = QueryHelper.createSelectByCred(Usuario.class);
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("username", username);
+            params.put("password", password);
+
+            List<Object> result = session.query(Usuario.class, sql, params);
+
+            if (!result.isEmpty()) {
+                usuario = (Usuario) result.get(0);
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR en login (getUsuarioByCredentials) para: " + username, e);
+        } finally {
+            session.close();
+        }
+        return usuario;
+    }
 }
