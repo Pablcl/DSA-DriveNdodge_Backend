@@ -37,14 +37,16 @@ public class PerfilManagerImpl implements PerfilManager {
         return u;
     }
 
-    public Usuario updatePerfil(String username, String nombre, String apellido, String email, String fechaNacimiento) {
+    public Usuario updatePerfil(String username, String nombre, String apellido, String email, String fechaNacimiento, String imagenPerfil) {
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
         if (u != null) {
             u.setNombre(nombre);
             u.setApellido(apellido);
             u.setEmail(email);
             u.setFechaNacimiento(fechaNacimiento);
-
+            if (imagenPerfil != null && !imagenPerfil.isEmpty()) {
+                u.setImagenPerfil(imagenPerfil);
+            }
             this.usuarioDAO.updateUsuario(u);
         }
         return u;

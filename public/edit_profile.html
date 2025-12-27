@@ -6,9 +6,7 @@
     <title>Editar Perfil - DriveNdodge</title>
 
     <link rel="stylesheet" href="css/styles.css">
-
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="css/edit_profile.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,6 +15,11 @@
 
 <div class="card-container">
     <h1>EDITAR DATOS</h1>
+
+    <div class="profile-pic-container" onclick="openAvatarModal()">
+        <img src="img/avatar/default.png" alt="Avatar" id="profileImage" class="profile-pic">
+        <p>(Click para cambiar)</p>
+    </div>
 
     <label for="nombre">NOMBRE</label>
     <input type="text" id="nombre" placeholder="Tu nombre">
@@ -32,6 +35,19 @@
 
     <button class="btn btn-save" id="btnGuardar">GUARDAR CAMBIOS</button>
     <button class="btn btn-cancel" id="btnCancelar">CANCELAR</button>
+</div>
+
+<div id="avatarModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h2>ELIGE TU AVATAR</h2>
+        <div class="avatar-grid">
+            <img src="img/avatar/avatar1.webp" onclick="selectAvatar('avatar1.webp')" class="avatar-option">
+            <img src="img/avatar/avatar2.webp" onclick="selectAvatar('avatar2.webp')" class="avatar-option">
+            <img src="img/avatar/avatar3.webp" onclick="selectAvatar('avatar3.webp')" class="avatar-option">
+            <img src="img/avatar/avatar_default.webp" onclick="selectAvatar('avatar_default.webp')" class="avatar-option">
+        </div>
+        <button class="btn btn-cancel" onclick="closeAvatarModal()" style="margin-top: 20px;">CANCELAR</button>
+    </div>
 </div>
 
 <script src="js/edit_profile.js"></script>

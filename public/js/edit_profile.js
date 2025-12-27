@@ -1,6 +1,24 @@
+var selectedAvatarFile = "avatar_default.webp"; //Default
+
+function openAvatarModal() {
+    $('#avatarModal').fadeIn();
+}
+
+function closeAvatarModal() {
+    $('#avatarModal').fadeOut();
+}
+
+function selectAvatar(imageName) {
+    selectedAvatarFile = imageName;
+
+    $('#profileImage').attr('src', 'img/avatar/' + imageName);
+
+    closeAvatarModal();
+}
+
+
 $(document).ready(function() {
     var username = localStorage.getItem('username');
-
     if (!username) {
         alert("No hay sesión iniciada. Redirigiendo al login...");
         window.location.href = "login.html";
@@ -12,11 +30,14 @@ $(document).ready(function() {
         type: 'GET',
         dataType: 'json',
         success: function(user) {
-            // Rellenar los inputs con la info recibida
             $('#nombre').val(user.nombre);
             $('#apellido').val(user.apellido);
             $('#email').val(user.email);
             $('#fecha').val(user.fechaNacimiento);
+            if (user.imagenPerfil) {
+                selectedAvatarFile = user.imagenPerfil;
+                $('#profileImage').attr('src', 'img/avatar/' + user.imagenPerfil);
+            }
         },
         error: function(xhr) {
             console.error("Error cargando perfil:", xhr);
@@ -30,7 +51,8 @@ $(document).ready(function() {
             nombre: $('#nombre').val(),
             apellido: $('#apellido').val(),
             email: $('#email').val(),
-            fechaNacimiento: $('#fecha').val()
+            fechaNacimiento: $('#fecha').val(),
+            imagenPerfil: selectedAvatarFile
         };
 
         $.ajax({

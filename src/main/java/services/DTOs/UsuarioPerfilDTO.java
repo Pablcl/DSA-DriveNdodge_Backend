@@ -11,6 +11,7 @@ public class UsuarioPerfilDTO {
     private int monedas;
     private int mejorPuntuacion;
     private String fechaNacimiento;
+    private String imagenPerfil;
 
     public UsuarioPerfilDTO() {}
 
@@ -22,6 +23,7 @@ public class UsuarioPerfilDTO {
         this.monedas = u.getMonedas();
         this.mejorPuntuacion = u.getMejorPuntuacion();
         this.fechaNacimiento = u.getFechaNacimiento();
+        this.imagenPerfil = u.getImagenPerfil();
     }
 
     public String getUsername() { return username; }
@@ -44,4 +46,7 @@ public class UsuarioPerfilDTO {
 
     public String getFechaNacimiento() { return fechaNacimiento; }
     public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
+    public String getImagenPerfil() { return imagenPerfil; }
+    public void setImagenPerfil(String imagenPerfil) { this.imagenPerfil = imagenPerfil; }
 }

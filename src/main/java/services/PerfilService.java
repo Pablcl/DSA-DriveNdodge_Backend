@@ -75,7 +75,8 @@ public class PerfilService {
                 usuarioDTO.getNombre(),
                 usuarioDTO.getApellido(),
                 usuarioDTO.getEmail(),
-                usuarioDTO.getFechaNacimiento()
+                usuarioDTO.getFechaNacimiento(),
+                usuarioDTO.getImagenPerfil()
         );
 
         if (u == null) {

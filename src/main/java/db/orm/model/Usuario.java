@@ -13,8 +13,11 @@ public class Usuario {
     private String fechaNacimiento;
     private int monedas;
     private int mejorPuntuacion;
+    private String imagenPerfil;
+
     public Usuario() {
         this.monedas = 1000;
+        this.imagenPerfil = "avatar_default.webp";
     }
 
     public Usuario(int ID, String username, String password,  String nombre, String apellido, String email, String fechaNacimiento) {
@@ -87,6 +90,15 @@ public class Usuario {
     public void setMejorPuntuacion(int mejorPuntuacion) {
         this.mejorPuntuacion = mejorPuntuacion;
     }
+
+    public String getImagenPerfil() {
+        return imagenPerfil;
+    }
+
+    public void setImagenPerfil(String imagenPerfil) {
+        this.imagenPerfil = imagenPerfil;
+    }
+
     @Override
     public String toString() {
         return "Usuario{username='" + username + "'}";
