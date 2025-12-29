@@ -14,6 +14,7 @@ public class Usuario {
     private int monedas;
     private int mejorPuntuacion;
     private String imagenPerfil;
+    private Integer clanId;
 
     public Usuario() {
         this.monedas = 1000;
@@ -104,4 +105,11 @@ public class Usuario {
         return "Usuario{username='" + username + "'}";
     }
 
+    public Integer getClanId() {
+        return clanId;
+    }
+
+    public void setClanId(Integer clanId) {
+        this.clanId = clanId;
+    }
 }

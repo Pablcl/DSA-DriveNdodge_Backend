@@ -3,6 +3,7 @@ package db.orm.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 
 public class ObjectHelper {
     public static String[] getFields(Object entity) {
@@ -29,6 +30,11 @@ public class ObjectHelper {
             if (f.getName().equalsIgnoreCase(property)) {
                 f.setAccessible(true);//por si el atributo es private nos deja modificarlo esta linea
                 try {
+                    if (value instanceof BigDecimal) {
+                        if (f.getType() == int.class) {
+                            value = ((BigDecimal) value).intValue();
+                        }
+                    }
                     f.set(object, value);
                     return; // importante para cerrar el bucle
                 } catch (IllegalAccessException e) {
