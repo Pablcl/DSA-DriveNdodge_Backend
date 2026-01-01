@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <!-- ESTIL ACTUAL + NOU ESTIL PIXEL -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/styles2.css">
 </head>
@@ -16,34 +15,18 @@
 <body class="landing-body clean-background2">
 
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
-
     <div class="container">
-
-<!--        <div class="navbar-brand d-flex align-items-center">-->
-<!--            <img src="img/logo.png" alt="DriveN'Dodge Logo" class="navbar-logo-small">-->
-<!--        </div>-->
-
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
-
             <ul class="navbar-nav me-auto pixel-font">
-                <li class="nav-item">
-                    <a class="nav-link active text-gold" href="shop.html">🛒 Tienda</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="inventario.html">🎒 Inventario</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="ranking.html">🏆 Ranking</a>
-                </li>
+                <li class="nav-item"><a class="nav-link active text-gold" href="shop.html">🛒 Tienda</a></li>
+                <li class="nav-item"><a class="nav-link" href="inventario.html">🎒 Inventario</a></li>
+                <li class="nav-item"><a class="nav-link" href="ranking.html">🏆 Ranking</a></li>
             </ul>
 
             <ul class="navbar-nav ms-auto align-items-center pixel-font">
-
                 <li class="nav-item me-3">
                     <div class="d-flex align-items-center bg-dark border border-warning rounded px-3 py-1">
                         <span class="me-2">💰</span>
@@ -52,8 +35,7 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle pixel-font" href="#" id="userDropdown"
-                       role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle pixel-font" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         👤 <span id="username-display">Usuari</span>
                     </a>
 
@@ -65,20 +47,12 @@
                 </li>
 
             </ul>
-
         </div>
     </div>
 </nav>
-<!--<div class="navbar-logo-center">-->
-<!--    <img src="img/logo.png" alt="DriveN'Dodge" class="navbar-logo-img">-->
-<!--</div>-->
 
 <div class="container mt-5 container-custom shop-container">
-
-    <h2 class="text-center mb-5 pixel-font">
-        Tienda de items
-    </h2>
-
+    <h2 class="text-center mb-5 pixel-font">Tienda de items</h2>
     <div id="shop-items-container" class="row">
         <div class="text-center py-5">
             <div class="spinner-border text-warning" role="status">
@@ -86,206 +60,31 @@
             </div>
         </div>
     </div>
-
 </div>
 
-
-
-<!-- Add these two elements near the end of the body in `public/shop.html` (before the closing </body>) -->
-<!-- Confirmation modal -->
+<!-- Modal de confirmación -->
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark text-white pixel-font">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title text-gold">Confirmar Compra</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p id="confirm-message" class="mb-0"></p>
-      </div>
-        <div class="modal-footer border-top-0 justify-content-end gap-3">
-            <button type="button"
-                    class="btn btn-secondary pixel-font"
-                    data-bs-dismiss="modal">
-                Cancelar
-            </button>
-
-            <button type="button"
-                    id="confirm-yes"
-                    class="btn btn-secondary pixel-font">
-                Comprar
-            </button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white pixel-font">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title text-gold">Confirmar Compra</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message" class="mb-0"></p>
+            </div>
+            <div class="modal-footer border-top-0 justify-content-end gap-3">
+                <button type="button" class="btn btn-secondary pixel-font" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirm-yes" class="btn btn-secondary pixel-font">Comprar</button>
+            </div>
         </div>
-
     </div>
-  </div>
 </div>
 
 <!-- Toast container -->
 <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-$(document).ready(function() {
-    let username = localStorage.getItem("username");
-    if (!username) { window.location.href = "index.html"; return; }
-    $('#username-display').text(username);
-    loadUserCoins();
-    loadShopItems();
-
-    $('#btn-logout').click(function(e) { e.preventDefault(); localStorage.clear(); window.location.href = "index.html"; });
-
-    function loadUserCoins() {
-        $.ajax({ type: 'GET', url: '/v1/shop/monedas/' + username, dataType: 'json',
-            success: function(response) { $('#coins-display').text(response.coins); },
-            error: function() { showToast('warning', 'Error cargando monedas.'); }
-        });
-    }
-
-    function loadShopItems() {
-        $.ajax({
-            type: 'GET', url: '/v1/shop/items', dataType: 'json',
-            success: function(items) {
-                let container = $('#shop-items-container'); container.empty();
-                if (!items || items.length === 0) {
-                    container.html('<h3 class="text-center pixel-font">No hay items disponibles actualmente.</h3>');
-                    return;
-                }
-                items.forEach(function(item) {
-                    let ruta = item.imagen;
-                    if (!ruta.startsWith("http") && !ruta.startsWith("/")) ruta = "/" + ruta;
-                    let idReal = item.id || item.ID;
-                    let html = `
-                        <div class="col-md-4 mb-4">
-                          <div class="card h-100">
-                            <div class="p-3 text-center" style="background-color: #222; border-bottom: 1px solid #444;">
-                              <img src="${ruta}" class="img-fluid" alt="${item.nombre}"
-                                   style="height: 180px; object-fit: contain;"
-                                   onerror="this.src='https://placehold.co/200x200?text=No+Image';">
-                            </div>
-                            <div class="card-body d-flex flex-column text-center">
-                              <h5 class="card-title text-gold fw-bold">${item.nombre}</h5>
-                              <p class="card-text small text-secondary">${item.descripcion}</p>
-                              <div class="mt-auto pt-3">
-                                <h4 class="fw-bold mb-3">${item.precio} 💰</h4>
-                                <button class="btn btn-buy w-100 py-2 rounded-pill shadow-sm btn-buy pixel-font"
-                                        data-item-id="${idReal}"
-                                        data-item-price="${item.precio}"
-                                        data-item-name="${item.nombre}">
-                                  COMPRAR AHORA
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>`;
-                    container.append(html);
-                });
-            },
-            error: function(xhr) {
-                $('#shop-items-container').html('<p class="text-danger text-center pixel-font">Error conectando con el servidor.</p>');
-            }
-        });
-    }
-
-    // Toast helper: type = 'success'|'danger'|'warning'|'info'
-    function showToast(type, message) {
-        const map = {
-            success: 'toast-success',
-            danger: 'toast-danger',
-            warning: 'toast-warning',
-            info: 'toast-info'
-        };
-        const cls = map[type] || 'toast-info';
-        const toastId = 'toast-' + Date.now();
-
-        const toastHtml = `
-      <div id="${toastId}" class="toast align-items-center ${cls} text-white mb-2"
-           role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
-        <div class="d-flex">
-          <div class="toast-body pixel-font">${message}</div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                  data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-      </div>`;
-
-        const $el = $(toastHtml).appendTo('#toast-container');
-        const bsToast = new bootstrap.Toast(document.getElementById(toastId));
-
-        $el.on('hidden.bs.toast', function() { $el.remove(); });
-        bsToast.show();
-    }
-
-
-// Confirmation modal returning a Promise<boolean>
-    function confirmPurchase(itemName, price) {
-        return new Promise((resolve) => {
-            $('#confirm-message').text("Quieres comprar " + itemName + " por " + price + " monedas?");
-            const modalEl = document.getElementById('confirmModal');
-            const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
-            const $yes = $('#confirm-yes');
-
-            let alreadyResolved = false;
-
-            // Ensure single handler
-            $yes.off('click.confirm').on('click.confirm', function() {
-                alreadyResolved = true;
-                resolve(true);
-                bsModal.hide();
-            });
-
-            // Si es tanca el modal sense clicar "Comprar" → cancel·lat
-            const onHidden = function() {
-                if (!alreadyResolved) {
-                    resolve(false);
-                }
-                modalEl.removeEventListener('hidden.bs.modal', onHidden);
-            };
-
-            modalEl.addEventListener('hidden.bs.modal', onHidden);
-            bsModal.show();
-        });
-    }
-
-
-    // Buy handler: uses custom confirmation + toasts
-    $(document).on('click', '.btn-buy', function() {
-        const itemId = $(this).data('item-id');
-        const itemName = $(this).data('item-name');
-        const itemPrice = parseInt($(this).data('item-price'));
-        let currentCoins = parseInt($('#coins-display').text()) || 0;
-
-        if (currentCoins < itemPrice) {
-            showToast('warning', "⚠️ No tienes suficientes monedas para comprar " + itemName);
-            return;
-        }
-
-        confirmPurchase(itemName, itemPrice).then(function(confirmed) {
-            if (!confirmed) {
-                showToast('danger', "Compra cancelada.");
-                return;
-            }
-
-
-            $.ajax({
-                type: 'POST',
-                url: '/v1/shop/buy/' + itemId,
-                contentType: 'application/json',
-                data: JSON.stringify(username),
-                success: function (response) {
-                    showToast('success', "✅ Compra realizada: " + itemName);
-                    loadUserCoins();
-                },
-                error: function (xhr) {
-                    let errorMsg = "Error desconocido";
-                    if (xhr.responseJSON && xhr.responseJSON.message) errorMsg = xhr.responseJSON.message;
-                    showToast('danger', "❌ Error en la compra: " + errorMsg);
-                }
-            });
-        });
-    });
-
-});
-</script>
-
+<script src="js/shop.js"></script>
 </body>
 </html>
