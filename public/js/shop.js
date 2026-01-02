@@ -49,25 +49,40 @@ $(document).ready(function() {
 
     function buyItem(item, modal) {
         $.ajax({
-            type: 'POST', url: '/v1/shop/buy', contentType: 'application/json',
-            data: JSON.stringify({ username, itemId: item.id }),
+            type: 'POST', url: '/v1/shop/buy/'+item.id, contentType: 'application/json',
+            data: JSON.stringify(username),
             success: function(resp) { modal.hide(); showToast('success', `¡Has comprado ${item.nombre}!`); loadUserCoins(); },
             error: function(xhr) { modal.hide(); showToast('warning', xhr.responseText || 'Error al comprar el item.'); }
         });
     }
 
     function showToast(type, message) {
+        const map = {
+            success: 'toast-success',
+            danger: 'toast-danger',
+            warning: 'toast-warning',
+            info: 'toast-info'
+        };
+        const cls = map[type] || 'toast-info';
         const toastId = 'toast-' + Date.now();
-        const toastHtml = `<div id="${toastId}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">${message}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>`;
-        $('#toast-container').append(toastHtml);
-        const toastEl = document.getElementById(toastId);
-        const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-        toast.show();
-        toastEl.addEventListener('hidden.bs.toast', function () { $(this).remove(); });
+
+        const toastHtml = `
+      <div id="${toastId}" class="toast align-items-center ${cls} text-white mb-2"
+           role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body pixel-font">${message}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                  data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>`;
+
+        const $el = $(toastHtml).appendTo('#toast-container');
+        const bsToast = new bootstrap.Toast(document.getElementById(toastId), {delay: 4000});
+
+        $el.on('hidden.bs.toast', function () {
+            $el.remove();
+        });
+        bsToast.show();
     }
+
 });

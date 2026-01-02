@@ -71,7 +71,7 @@ public class ShopService {
 
         } catch (RuntimeException e) {
             return Response.status(Response.Status.CONFLICT)
-                    .entity(new MessageResponse(e.getMessage()))
+                    .entity("Error: " + e.getMessage())
                     .build();
         }
     }

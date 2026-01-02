@@ -70,7 +70,7 @@ public class AuthService {
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity(new MessageResponse(e.getMessage()))
+                    .entity("Error: " + e.getMessage())
                     .build();
         }
     }

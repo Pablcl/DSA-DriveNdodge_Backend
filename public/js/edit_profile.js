@@ -16,12 +16,31 @@ function selectAvatar(imageName) {
     closeAvatarModal();
 }
 
+function showToast(type, message) {
+    const toastId = 'toast-' + Date.now();
+    const toastHtml = `
+    <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>`;
+    $('#toast-container').append(toastHtml);
+
+    const toastEl = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+    toast.show();
+
+    toastEl.addEventListener('hidden.bs.toast', function () { $(this).remove(); });
+}
+
+
 
 $(document).ready(function() {
     var username = localStorage.getItem('username');
     if (!username) {
-        alert("No hay sesión iniciada. Redirigiendo al login...");
-        window.location.href = "login.html";
+        showToast('warning', 'No hay sesión iniciada. Redirigiendo al login...');
+        setTimeout(() => window.location.href = "login.html", 1200);
         return;
     }
 
@@ -41,8 +60,7 @@ $(document).ready(function() {
         },
         error: function(xhr) {
             console.error("Error cargando perfil:", xhr);
-            alert("Error al cargar los datos del perfil. Código: " + xhr.status);
-        }
+            showToast('warning', 'Error al cargar los datos del perfil. Código: ' + xhr.status);        }
     });
 
     $('#btnGuardar').click(function() {
@@ -61,12 +79,12 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify(updatedUser),
             success: function(response) {
-                alert("¡Perfil actualizado correctamente!");
-                window.location.href = "perfil.html"; // Volver a la pantalla de perfil
+                showToast('success', '¡Perfil actualizado correctamente!');
+                setTimeout(() => window.location.href = "perfil.html", 1200);
             },
             error: function(xhr) {
                 console.error("Error actualizando:", xhr);
-                alert("Error al guardar los cambios. Asegúrate de que los datos son válidos.");
+                showToast('warning', xhr.responseText || 'Error al guardar los cambios. Asegúrate de que los datos son válidos.');
             }
         });
     });
