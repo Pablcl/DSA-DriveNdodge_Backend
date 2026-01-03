@@ -20,7 +20,7 @@ public class SessionImpl implements Session {
         PreparedStatement pstm = null;
 
         try {
-            pstm = conn.prepareStatement(insertQuery);
+            pstm = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS); // GENERETED_KEYS para obtener el id que se autoincrementa
             int i = 1;
 
             // Recorrem els camps i omplim els interrogants
@@ -33,6 +33,24 @@ public class SessionImpl implements Session {
 
             // IMPORTANT: Fem executeUpdate() per a INSERTS, no executeQuery()
             pstm.executeUpdate();
+
+            // Recuperar el ID generado automáticamente por la BD envez de inicilizar un valor aleatorio
+            ResultSet generatedKeys = pstm.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int generatedId = generatedKeys.getInt(1);
+
+                // Intentar asignar el ID usando ObjectHelper.setter()
+                // Primero intentamos con "ID" (mayúsculas), si falla con "id" (minúsculas)
+                try {
+                    ObjectHelper.setter(entity, "ID", generatedId);
+                } catch (Exception e) {
+                    try {
+                        ObjectHelper.setter(entity, "id", generatedId);
+                    } catch (Exception ex) {
+                        // Si ninguno funciona, ignorar silenciosamente
+                    }
+                }
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
