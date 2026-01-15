@@ -12,8 +12,22 @@ public class UsuarioPerfilDTO {
     private int mejorPuntuacion;
     private String fechaNacimiento;
     private String imagenPerfil;
-
+    private String clanNombre;
+    private String clanImagen;
     public UsuarioPerfilDTO() {}
+
+    public UsuarioPerfilDTO(Usuario u, String clanNombre, String clanImagen) {
+        this.username = u.getUsername();
+        this.nombre = u.getNombre();
+        this.apellido = u.getApellido();
+        this.email = u.getEmail();
+        this.monedas = u.getMonedas();
+        this.mejorPuntuacion = u.getMejorPuntuacion();
+        this.fechaNacimiento = u.getFechaNacimiento();
+        this.imagenPerfil = u.getImagenPerfil();
+        this.clanNombre = clanNombre;
+        this.clanImagen = clanImagen;
+    }
 
     public UsuarioPerfilDTO(Usuario u) {
         this.username = u.getUsername();
@@ -49,4 +63,20 @@ public class UsuarioPerfilDTO {
 
     public String getImagenPerfil() { return imagenPerfil; }
     public void setImagenPerfil(String imagenPerfil) { this.imagenPerfil = imagenPerfil; }
+
+    public String getClanNombre() {
+        return clanNombre;
+    }
+
+    public void setClanNombre(String clanNombre) {
+        this.clanNombre = clanNombre;
+    }
+
+    public String getClanImagen() {
+        return clanImagen;
+    }
+
+    public void setClanImagen(String clanImagen) {
+        this.clanImagen = clanImagen;
+    }
 }

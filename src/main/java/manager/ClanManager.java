@@ -12,4 +12,5 @@ public interface ClanManager {
     List<ClanRankingDTO> getRanking();
     void unirseClan(String username, String clanNombre);
     List<Usuario> getMiembros(String clanNombre);
+    public List<Clan> getAllClans();
 }

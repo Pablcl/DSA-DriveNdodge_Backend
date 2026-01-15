@@ -1,5 +1,8 @@
 package services;
 
+import db.orm.dao.ClanDAO;
+import db.orm.dao.ClanDAOImpl;
+import db.orm.model.Clan;
 import db.orm.model.Usuario;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,10 +48,20 @@ public class PerfilService {
 
         try{
             Usuario u = perfilManager.getPerfil(username);
-            UsuarioPerfilDTO dto = new UsuarioPerfilDTO(u);
-            return Response.status(Response.Status.OK)
-                    .entity(dto)
-                    .build();
+
+            String nombreClan = "Sin Clan";
+            String imagenClan = "clan_default.png";
+            if (u.getClanId() != null && u.getClanId() > 0) {
+                ClanDAO clanDAO = ClanDAOImpl.getInstance();
+                Clan c = clanDAO.getClanById(u.getClanId());
+
+                if (c != null) {
+                    nombreClan = c.getNombre();
+                    imagenClan = c.getImagen();
+                }
+            }
+            UsuarioPerfilDTO dto = new UsuarioPerfilDTO(u, nombreClan, imagenClan);
+            return Response.status(Response.Status.OK).entity(dto).build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new MessageResponse(e.getMessage()))

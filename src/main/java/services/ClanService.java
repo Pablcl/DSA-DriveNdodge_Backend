@@ -89,4 +89,17 @@ public class ClanService {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
+
+    @GET
+    @Path("/all")
+    @ApiOperation(value = "Obtener lista de todos los clanes", notes = "Devuelve una lista simple con todos los clanes disponibles.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Lista de clanes obtenida", response = Clan.class, responseContainer="List")
+    })
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllClans() {
+        List<Clan> clanes = this.manager.getAllClans();
+        GenericEntity<List<Clan>> entity = new GenericEntity<List<Clan>>(clanes) {};
+        return Response.status(Response.Status.OK).entity(entity).build();
+    }
 }

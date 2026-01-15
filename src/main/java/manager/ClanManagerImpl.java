@@ -58,6 +58,11 @@ public class ClanManagerImpl implements ClanManager {
     }
 
     @Override
+    public List<Clan> getAllClans() {
+        return this.clanDAO.getAllClans();
+    }
+
+    @Override
     public List<ClanRankingDTO> getRanking() {
         LOGGER.info("Solicitando Ranking de clanes...");
         return this.clanDAO.getAllClanRanking();

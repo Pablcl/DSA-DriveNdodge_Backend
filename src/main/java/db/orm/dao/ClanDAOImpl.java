@@ -173,4 +173,35 @@ public class ClanDAOImpl implements ClanDAO {
         }
         return miembros;
     }
+    @Override
+    public List<Clan> getAllClans() {
+        logger.info("Obteniendo lista de todos los clanes");
+        Session session = null;
+        List<Clan> clanes = new ArrayList<>();
+        try {
+            session = FactorySession.openSession();
+            clanes = (List<Clan>)(List<?>) session.findAll(Clan.class);
+        } catch (Exception e) {
+            logger.error("Error al obtener clanes: " + e.getMessage(), e);
+        } finally {
+            if (session != null) session.close();
+        }
+        return clanes;
+    }
+    @Override
+    public Clan getClanById(int id) {
+        logger.info("Buscando clan por ID: " + id);
+        Session session = null;
+        Clan clan = null;
+        try {
+            session = FactorySession.openSession();
+            clan = (Clan) session.get(Clan.class, id);
+        } catch (Exception e) {
+            logger.error("Error al buscar clan por ID " + id + ": " + e.getMessage(), e);
+        } finally {
+            if (session != null) session.close();
+        }
+        return clan;
+    }
+
 }
