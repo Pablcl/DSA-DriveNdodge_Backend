@@ -22,6 +22,23 @@ $(document).ready(function() {
             if (user.imagenPerfil) {
                 $('#profileImage').attr('src', 'img/avatar/' + user.imagenPerfil);
             }
+            // LÓGICA DEL CLAN
+            var clanName = user.clanNombre;
+            var clanImg = user.clanImagen;
+            $('#clanBadge').css('display', 'inline-flex');
+
+            if (clanName && clanName !== "Sin Clan" && clanName !== "null") {
+
+                $('#clanNameText').text(clanName);
+                if (!clanImg || clanImg === "null") {
+                    clanImg = "clan_default.png";
+                }
+                $('#clanIcon').attr('src', 'img/clan/' + clanImg).show();
+
+            } else {
+                $('#clanNameText').text("Sin Clan").css('color', '#AAA');
+                $('#clanIcon').hide();
+            }
         },
         error: function(xhr) {
             console.error("Error:", xhr);
