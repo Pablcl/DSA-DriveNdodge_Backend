@@ -28,13 +28,13 @@ public class ClanDAOImpl implements ClanDAO {
     }
 
     @Override
-    public int createClan(String nombre, String descripcion) {
+    public int createClan(String nombre, String descripcion, String imagen) {
         logger.info("Creando clan: " + nombre);
         Session session = null;
         int clanId = 0;
         try {
             session = FactorySession.openSession();
-            Clan clan = new Clan(nombre, descripcion);
+            Clan clan = new Clan(nombre, descripcion, imagen);
 
             logger.debug("Guardando clan con nombre: " + nombre + ", descripcion: " + descripcion);
             session.save(clan);

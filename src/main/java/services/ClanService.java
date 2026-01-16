@@ -53,7 +53,7 @@ public class ClanService {
         if (clan.getNombre() == null || clan.getDescripcion() == null)
             return Response.status(Response.Status.BAD_REQUEST).entity(new MessageResponse("Datos incompletos")).build();
 
-        Clan nuevo = this.manager.crearClan(clan.getNombre(), clan.getDescripcion());
+        Clan nuevo = this.manager.crearClan(clan.getNombre(), clan.getDescripcion(), clan.getImagen());
         if (nuevo != null)
             return Response.status(Response.Status.CREATED).entity(nuevo).build();
         else

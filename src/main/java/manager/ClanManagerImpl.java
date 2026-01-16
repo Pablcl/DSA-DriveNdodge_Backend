@@ -28,7 +28,7 @@ public class ClanManagerImpl implements ClanManager {
     }
 
     @Override
-    public Clan crearClan(String nombre, String descripcion) {
+    public Clan crearClan(String nombre, String descripcion, String imagen) {
         LOGGER.info("Intento de crear clan: " + nombre);
 
         if (nombre == null || nombre.isEmpty()) {
@@ -41,7 +41,7 @@ public class ClanManagerImpl implements ClanManager {
             return null;
         }
 
-        int id = this.clanDAO.createClan(nombre, descripcion);
+        int id = this.clanDAO.createClan(nombre, descripcion, imagen);
 
         if (id > 0) {
             LOGGER.info("Clan creado con éxito con ID: " + id);

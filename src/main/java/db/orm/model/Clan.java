@@ -8,10 +8,15 @@ public class Clan {
 
     public Clan() {}
 
-    public Clan(String nombre, String descripcion) {
+    public Clan(String nombre, String descripcion, String imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.imagen = "clan_default.png";
+
+        if (imagen != null && !imagen.isEmpty()) {
+            this.imagen = imagen;
+        } else {
+            this.imagen = "clan_default.png";
+        }
     }
 
     public int getId() { return ID; }
