@@ -36,10 +36,7 @@ public class ChatIAService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response sendMessage(ChatIARequest request) {
 
-        String systemInstruction = "Actúa como la IA de un coche de carreras futurista. " +
-                "Responde SIEMPRE en Español. " +
-                "Sé breve, conciso (máximo 1 frase) y un poco sarcástico. " +
-                "Mensaje del conductor: ";
+        String systemInstruction = "Responde SIEMPRE en Castellano y de forma breve a este mensaje: ";
 
         String finalPrompt = systemInstruction + request.getPrompt();
         String aiText = chatManager.askIA(finalPrompt);

@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+/* BOTÓN FLOTANTE (LAUNCHER) */
+#chat-launcher {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    background-color: #000;
+    border: 3px solid #00FF00;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2000;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+    transition: transform 0.2s;
+}
+
+#chat-launcher:hover { transform: scale(1.1); }
+#chat-launcher img { width: 100%; height: 100%; object-fit: cover; }
+
+/* --- VENTANA DEL CHAT --- */
+#chat-window {
+    position: fixed;
+    bottom: 110px;
+    right: 30px;
+    width: 350px;
+    height: 450px;
+    background-color: rgba(0, 0, 0, 0.95);
+    border: 4px solid #fff;
+    font-family: 'VT323', monospace;
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    z-index: 2000;
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
+}
+
+/* Cabecera */
+.chat-header {
+    background-color: #00FF00;
+    color: #000;
+    padding: 10px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #fff;
+}
+.btn-close-chat { background: none; border: none; font-weight: bold; cursor: pointer; color: #000; }
+
+/* Área de Mensajes */
+#chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Burbujas */
+.message { display: flex; width: 100%; }
+.message.user { justify-content: flex-end; }
+.message.ai { justify-content: flex-start; }
+
+.bubble {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+/* Usuario (Azul) */
+.message.user .bubble {
+    background-color: #2196F3;
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 10px 10px 0 10px;
+}
+
+/* IA (Negro/Verde) */
+.message.ai .bubble {
+    background-color: #000;
+    color: #00FF00;
+    border: 2px solid #00FF00;
+    border-radius: 10px 10px 10px 0;
+}
+
+/* Input */
+.chat-input-area {
+    padding: 10px;
+    background-color: #222;
+    border-top: 2px solid #fff;
+    display: flex;
+    gap: 5px;
+}
+
+#chat-input {
+    flex: 1;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 8px;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+}
+
+#btn-chat-send {
+    background-color: #00FF00;
+    color: #000;
+    border: none;
+    font-family: 'VT323', monospace;
+    font-weight: bold;
+    padding: 0 15px;
+    cursor: pointer;
+}
+
+/* --- ESTILOS DE TOAST (Si faltan en tu styles2.css) --- */
+.pixel-font { font-family: 'VT323', monospace; font-size: 1.2rem; }
+.toast-danger { background-color: #b71c1c !important; color: white; border: 2px solid #fff; }
+.toast-success { background-color: #008f11 !important; color: white; border: 2px solid #fff; }
