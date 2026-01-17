@@ -545,3 +545,45 @@ body.clean-background2 {
     box-shadow: 0 0 8px #ffc107;
 }
 
+.clan-preview-img {
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+    border: 2px solid #f5c542;
+
+    background-color: #111;
+    object-fit: cover;
+
+    image-rendering: pixelated;
+}
+
+
+/* ======================================================================
+   DESPLEGABLES CUSTOM
+   ====================================================================== */
+.clan-select {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7rem;
+    background-color: #0b0b0b;
+    color: #ffffff;
+
+    border: 2px solid #f5c542;
+    border-radius: 8px;
+
+    padding: 12px 40px 12px 12px;
+    cursor: pointer;
+
+    background-image:
+            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23f5c542'><polygon points='0,0 16,0 8,10'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+}
+
+.clan-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(245, 197, 66, 0.4);
+    border-color: #f5c542;
+}
+
