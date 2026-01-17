@@ -369,32 +369,41 @@ body.clean-background2 {
     font-family: 'VT323', monospace;
 }
 
-.navbar-custom {
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+/*.navbar-custom {*/
+/*    background: rgba(0, 0, 0, 0.55);*/
+/*    backdrop-filter: blur(6px);*/
+/*    -webkit-backdrop-filter: blur(6px);*/
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-}
+/*    border-bottom: 1px solid rgba(255, 255, 255, 0.15);*/
+/*}*/
 
-.navbar-logo-center {
-    width: 100%;
-    text-align: center;
-    margin-top: -10px;
-    margin-bottom: 5px;
-    pointer-events: none;
-}
+/*.navbar-logo-center {*/
+/*    width: 100%;*/
+/*    text-align: center;*/
+/*    margin-top: -10px;*/
+/*    margin-bottom: 5px;*/
+/*    pointer-events: none;*/
+/*}*/
 
-.navbar-logo-img {
-    height: 70px;
-    width: auto;
-    image-rendering: pixelated;
-}
+/*.navbar-logo-img {*/
+/*    height: 70px;*/
+/*    width: auto;*/
+/*    image-rendering: pixelated;*/
+/*}*/
 
-.navbar-logo-small {
-    height: 50px;     /* Ajusta la mida segons vulguis (30–45px recomanat) */
-    width: auto;
-}
+/*.navbar-logo-small {*/
+/*    height: 50px;     !* Ajusta la mida segons vulguis (30–45px recomanat) *!*/
+/*    width: auto;*/
+/*}*/
+
+/*.navbar {*/
+/*    min-height: 64px;*/
+/*}*/
+
+/*.navbar-nav .nav-link {*/
+/*    font-size: 1rem;*/
+/*}*/
+
 
 
 
