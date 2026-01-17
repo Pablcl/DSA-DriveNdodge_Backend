@@ -15,5 +15,6 @@ public interface ClanDAO {
     public List<Clan> getAllClans();
     Clan getClanById(int id);
     void salirClan(String username);
+    public Integer getClanIdByUsername(String username);
 
 }

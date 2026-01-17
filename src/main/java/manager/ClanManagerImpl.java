@@ -28,14 +28,18 @@ public class ClanManagerImpl implements ClanManager {
     }
 
     @Override
-    public Clan crearClan(String nombre, String descripcion, String imagen) {
+    public Clan crearClan(String nombre, String descripcion, String imagen, String creadorUsername) {
         LOGGER.info("Intento de crear clan: " + nombre);
 
         if (nombre == null || nombre.isEmpty()) {
             LOGGER.error("Error: Nombre de clan vacío");
             return null;
         }
-
+        Integer currentClanId = this.clanDAO.getClanIdByUsername(creadorUsername);
+        if (currentClanId != null) {
+            LOGGER.warn("El usuario " + creadorUsername + " ya tiene clan (ID: " + currentClanId + "). Operación cancelada.");
+            throw new RuntimeException("ya tiene clan");
+        }
         if (this.clanDAO.getClanByNombre(nombre) != null) {
             LOGGER.error("Error: Ya existe un clan con el nombre " + nombre);
             return null;
@@ -52,6 +56,7 @@ public class ClanManagerImpl implements ClanManager {
 
         if (id > 0) {
             LOGGER.info("Clan creado con éxito con ID: " + id);
+            this.unirseClan(creadorUsername, nombre);
             return this.clanDAO.getClanByNombre(nombre);
         } else {
             LOGGER.error("Error al crear el clan en la base de datos");

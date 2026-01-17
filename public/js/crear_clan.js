@@ -39,10 +39,12 @@ function loadUserCoins() {
 }
 
 function crearClan() {
+    let currentUsername = localStorage.getItem("username");
     const clan = {
         nombre: $('#clan-nombre').val().trim(),
         descripcion: $('#clan-descripcion').val().trim(),
-        imagen: $('#clan-imagen').val()
+        imagen: $('#clan-imagen').val(),
+        username: currentUsername
     };
 
     $.ajax({

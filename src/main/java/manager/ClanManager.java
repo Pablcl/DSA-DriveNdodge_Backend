@@ -7,7 +7,7 @@ import services.DTOs.ClanRankingDTO;
 import java.util.List;
 
 public interface ClanManager {
-    Clan crearClan(String nombre, String descripcion, String imagen);
+    Clan crearClan(String nombre, String descripcion, String imagen, String creadorUsername);
     Clan getClan(String nombre);
     List<ClanRankingDTO> getRanking();
     void unirseClan(String username, String clanNombre);

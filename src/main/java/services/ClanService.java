@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import services.DTOs.ClanCreationRequest;
 import services.DTOs.ClanRankingDTO;
 import services.DTOs.MessageResponse;
 
@@ -49,15 +50,24 @@ public class ClanService {
     })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response crearClan(Clan clan) {
-        if (clan.getNombre() == null || clan.getDescripcion() == null)
-            return Response.status(Response.Status.BAD_REQUEST).entity(new MessageResponse("Datos incompletos")).build();
+    public Response crearClan(ClanCreationRequest request) {
 
-        Clan nuevo = this.manager.crearClan(clan.getNombre(), clan.getDescripcion(), clan.getImagen());
-        if (nuevo != null)
-            return Response.status(Response.Status.CREATED).entity(nuevo).build();
-        else
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new MessageResponse("Error al crear el clan")).build();
+        if (request.getNombre() == null || request.getDescripcion() == null || request.getUsername() == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new MessageResponse("Faltan datos obligatorios")).build();
+        }
+
+        try {
+            Clan nuevo = this.manager.crearClan(request.getNombre(), request.getDescripcion(), request.getImagen(), request.getUsername());
+
+            if (nuevo != null) {
+                return Response.status(Response.Status.CREATED).entity(nuevo).build();
+            } else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new MessageResponse("Error al crear el clan (Nombre posiblemente duplicado)")).build();
+            }
+
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.CONFLICT).entity(new MessageResponse("¡Ya perteneces a un clan! Debes salir primero.")).build();
+        }
     }
 
     @PUT
@@ -75,11 +85,7 @@ public class ClanService {
 
         } catch (IllegalStateException e) {
             if ("YA_TIENE_CLAN".equals(e.getMessage())) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new MessageResponse(
-                                "Ya formas parte de un clan. Debes salir antes de unirte a otro."
-                        ))
-                        .build();
+                return Response.status(Response.Status.CONFLICT).entity(new MessageResponse("Ya formas parte de un clan. Debes salir antes de unirte a otro.")).build();
             }
             return Response.status(Response.Status.BAD_REQUEST).build();
         }

@@ -270,5 +270,26 @@ public class ClanDAOImpl implements ClanDAO {
             logger.error("Error al intentar borrar clan vacío ID " + clanId, e);
         }
     }
+    @Override
+    public Integer getClanIdByUsername(String username) {
+        Session session = null;
+        Integer clanId = null;
+        try {
+            session = FactorySession.openSession();
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("username", username);
 
+            List<Object> users = session.findAll(Usuario.class, params);
+            if (!users.isEmpty()) {
+                Usuario u = (Usuario) users.get(0);
+                clanId = u.getClanId();
+            }
+        } catch (Exception e) {
+            logger.error("Error al consultar clan del usuario " + username, e);
+        } finally {
+            if (session != null) session.close();
+        }
+
+        return (clanId != null && clanId != 0) ? clanId : null;
+    }
 }
