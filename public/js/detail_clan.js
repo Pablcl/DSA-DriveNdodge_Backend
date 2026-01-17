@@ -154,12 +154,10 @@ function salirClan(clanName) {
         contentType: 'application/json',
         data: JSON.stringify({ username: CURRENT_USER.username }),
         success: function () {
-            $('#btn-unirse-clan')
-                .prop('disabled', false)
-                .text('Unirse al clan');
-
-            $('#btn-salir-clan').addClass('d-none');
-            loadClanMembers(clanName);
+            window.location.replace("clanes.html");
+        },
+        error: function () {
+            showInfoModal("Error al salir del clan.");
         }
     });
 }

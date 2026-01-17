@@ -122,27 +122,34 @@ public class ClanDAOImpl implements ClanDAO {
             HashMap<String, Object> paramsC = new HashMap<>();
             paramsC.put("nombre", clanNombre);
             List<Object> clanes = session.findAll(Clan.class, paramsC);
-            Clan c = clanes.isEmpty() ? null : (Clan) clanes.get(0);
+            Clan nuevoClan = clanes.isEmpty() ? null : (Clan) clanes.get(0);
 
-            if (u == null || c == null) {
-                logger.warn("Usuario o clan no encontrado");
-                return;
+            if (u != null && nuevoClan != null) {
+                Integer currentId = u.getClanId();
+                boolean tieneClan = (currentId != null && currentId != 0);
+
+                if (tieneClan) {
+                    if (currentId.equals(nuevoClan.getId())) {
+                        logger.warn("El usuario ya pertenece a este mismo clan.");
+                        return;
+                    } else {
+                        logger.warn("Usuario ya tiene clan (ID: " + currentId + "). Debe salir primero.");
+                        throw new IllegalStateException("YA_TIENE_CLAN");
+                    }
+                }
+
+                u.setClanId(nuevoClan.getId());
+                session.update(u);
+                logger.info("Usuario " + username + " unido a " + clanNombre);
+
+            } else {
+                logger.warn("Usuario o Clan no encontrados.");
             }
-
-            if (u.getClanId() != null) {
-                logger.warn("Usuario " + username + " ya pertenece a un clan");
-                throw new IllegalStateException("YA_TIENE_CLAN");
-            }
-
-            u.setClanId(c.getId());
-            session.update(u);
-
-            logger.info("Usuario " + username + " se ha unido al clan " + clanNombre);
 
         } catch (IllegalStateException e) {
             throw e;
         } catch (Exception e) {
-            logger.error("Error al unir usuario al clan: " + e.getMessage(), e);
+            logger.error("Error al unir usuario a clan: " + e.getMessage(), e);
             throw new RuntimeException(e);
         } finally {
             if (session != null) session.close();
@@ -164,11 +171,14 @@ public class ClanDAOImpl implements ClanDAO {
             List<Object> users = session.findAll(Usuario.class, paramsU);
             Usuario u = users.isEmpty() ? null : (Usuario) users.get(0);
 
-            if (u != null) {
+            if (u != null && u.getClanId() != null && u.getClanId() != 0) {
+
+                int clanIdAbandonado = u.getClanId();
                 u.setClanId(null);
                 session.update(u);
-
                 logger.info("Usuario " + username + " ha salido correctamente del clan");
+
+                checkAndDeleteEmptyClan(session, clanIdAbandonado);
             } else {
                 logger.warn("No se encontró usuario con username: " + username);
             }
@@ -240,6 +250,25 @@ public class ClanDAOImpl implements ClanDAO {
             if (session != null) session.close();
         }
         return clan;
+    }
+
+    private void checkAndDeleteEmptyClan(Session session, int clanId) {
+        try {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("clanId", clanId);
+            List<Object> miembrosRestantes = session.findAll(Usuario.class, params);
+
+            if (miembrosRestantes.isEmpty()) {
+                Clan clanVacio = (Clan) session.get(Clan.class, clanId);
+
+                if (clanVacio != null) {
+                    session.delete(clanVacio);
+                    logger.info("LIMPIEZA: El clan '" + clanVacio.getNombre() + "' (ID: " + clanId + ") se ha quedado vacío y ha sido eliminado.");
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error al intentar borrar clan vacío ID " + clanId, e);
+        }
     }
 
 }

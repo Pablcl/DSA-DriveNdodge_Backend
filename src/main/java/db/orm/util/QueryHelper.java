@@ -86,4 +86,12 @@ public class QueryHelper {
         sb.append(" WHERE username = ? AND password = SHA2(?, 256)");
         return sb.toString();
     }
+
+    public static String createQueryDELETE(Object entity) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("DELETE FROM ").append(entity.getClass().getSimpleName());
+        sb.append(" WHERE ID = ?");
+
+        return sb.toString();
+    }
 }

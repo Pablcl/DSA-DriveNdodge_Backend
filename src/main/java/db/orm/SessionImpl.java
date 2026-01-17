@@ -196,4 +196,45 @@ public class SessionImpl implements Session {
         return resultList;
     }
 
+    @Override
+    public void delete(Object object) {
+        String deleteQuery = QueryHelper.createQueryDELETE(object);
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = conn.prepareStatement(deleteQuery);
+
+            // Obtenemos el ID del objeto para saber cuál borrar
+            Object idValue = null;
+            try {
+                idValue = ObjectHelper.getter(object, "ID");
+            } catch (Exception e) {
+                // Si falla "ID" probamos con "id" minúscula
+                try {
+                    idValue = ObjectHelper.getter(object, "id");
+                } catch (Exception ex) {
+                    // Si tampoco funciona, dejamos idValue como null
+                }
+            }
+
+            if (idValue != null) {
+                pstm.setObject(1, idValue);
+                pstm.executeUpdate();
+            } else {
+                System.err.println("Error: No se puede borrar objeto sin ID");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+            } catch (SQLException e) {
+
+            }
+        }
+    }
+
 }
