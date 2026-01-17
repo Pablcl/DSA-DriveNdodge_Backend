@@ -41,6 +41,13 @@ public class ClanManagerImpl implements ClanManager {
             return null;
         }
 
+        if (imagen == null || imagen.isEmpty()) {
+            imagen = "clan_default.png";
+        }
+        if (!imagen.startsWith("img/")) {
+            imagen = "img/clan/" + imagen;
+        }
+
         int id = this.clanDAO.createClan(nombre, descripcion, imagen);
 
         if (id > 0) {
