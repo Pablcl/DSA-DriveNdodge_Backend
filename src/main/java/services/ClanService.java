@@ -69,9 +69,36 @@ public class ClanService {
     })
     @Consumes(MediaType.APPLICATION_JSON)
     public Response unirseClan(@PathParam("clanName") String clanName, Usuario u) {
-        this.manager.unirseClan(u.getUsername(), clanName);
+        try {
+            this.manager.unirseClan(u.getUsername(), clanName);
+            return Response.status(Response.Status.OK).build();
+
+        } catch (IllegalStateException e) {
+            if ("YA_TIENE_CLAN".equals(e.getMessage())) {
+                return Response.status(Response.Status.CONFLICT)
+                        .entity(new MessageResponse(
+                                "Ya formas parte de un clan. Debes salir antes de unirte a otro."
+                        ))
+                        .build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+
+    @PUT
+    @Path("/leave")
+    @ApiOperation(value = "Salir del clan", notes = "Elimina al usuario de su clan actual.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Usuario ha salido del clan"),
+            @ApiResponse(code = 404, message = "Usuario no encontrado")
+    })
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response salirClan(Usuario u) {
+        this.manager.salirClan(u.getUsername());
         return Response.status(Response.Status.OK).build();
     }
+
 
     @GET
     @Path("/{clanName}/members")

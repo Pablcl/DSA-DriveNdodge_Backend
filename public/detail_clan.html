@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalle del Clan</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles2.css">
+    <link rel="stylesheet" href="css/navbar.css">
+</head>
+
+<body class="landing-body clean-background2">
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container">
+
+        <ul class="navbar-nav me-auto pixel-font">
+            <li class="nav-item">
+                <a href="clanes.html" class="nav-link text-light">
+                    ⬅ Volver a Clanes
+                </a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto align-items-center pixel-font">
+            <li class="nav-item me-3">
+                <div class="d-flex align-items-center bg-dark border border-warning rounded px-3 py-1">
+                    <span class="me-2">💰</span>
+                    <span id="coins-display" class="fw-bold text-white">---</span>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle pixel-font" href="#" id="userDropdown"
+                   role="button" data-bs-toggle="dropdown">
+                    👤 <span id="username-display">Usuari</span>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end bg-dark border-secondary">
+                    <li><a class="dropdown-item text-light pixel-font" href="perfil.html">Mi Perfil</a></li>
+                    <li><hr class="dropdown-divider bg-secondary"></li>
+                    <li><a class="dropdown-item text-danger pixel-font" href="#" id="btn-logout">Cerrar Sesión</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+<div class="container mt-5 container-custom">
+
+    <div class="text-center mb-4">
+        <img id="clan-imagen"
+             src=""
+             alt="Imagen del clan"
+             class="clan-profile-image mb-3">
+
+
+        <h2 id="clan-nombre" class="pixel-font"></h2>
+
+        <p id="clan-descripcion" class="text-light pixel-font mt-2"></p>
+    </div>
+
+    <div class="text-center mb-4">
+        <button id="btn-unirse-clan" class="btn btn-warning pixel-font me-2">
+            Unirse al clan
+        </button>
+
+        <button id="btn-salir-clan" class="btn btn-outline-danger pixel-font d-none">
+            Salir del clan
+        </button>
+    </div>
+
+
+    <hr class="border-warning">
+
+    <h4 class="text-center pixel-font mb-3">👥 Miembros del clan</h4>
+
+    <div id="clan-miembros" class="row justify-content-center">
+        <p class="text-muted text-center pixel-font">Cargando miembros...</p>
+    </div>
+
+</div>
+<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white pixel-font">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title text-gold">Información</h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p id="info-modal-message" class="mb-0"></p>
+            </div>
+
+            <div class="modal-footer border-top-0 justify-content-center">
+                <button type="button"
+                        class="btn btn-secondary pixel-font"
+                        data-bs-dismiss="modal">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/detail_clan.js"></script>
+</body>
+</html>

@@ -33,7 +33,7 @@ $(document).ready(function() {
                 if (!clanImg || clanImg === "null") {
                     clanImg = "clan_default.png";
                 }
-                $('#clanIcon').attr('src', 'img/clan/' + clanImg).show();
+                $('#clanIcon').attr('src', clanImg).show();
 
             } else {
                 $('#clanNameText').text("Sin Clan").css('color', '#AAA');

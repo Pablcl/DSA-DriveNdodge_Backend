@@ -75,6 +75,13 @@ public class ClanManagerImpl implements ClanManager {
     }
 
     @Override
+    public void salirClan(String username) {
+        LOGGER.info("Usuario " + username + " sale de su clan");
+        this.clanDAO.salirClan(username);
+    }
+
+
+    @Override
     public List<Usuario> getMiembros(String clanNombre) {
         LOGGER.info("Solicitando miembros del clan: " + clanNombre);
         return this.clanDAO.getMiembros(clanNombre);

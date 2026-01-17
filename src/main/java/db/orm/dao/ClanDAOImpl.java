@@ -110,6 +110,7 @@ public class ClanDAOImpl implements ClanDAO {
     public void unirseClan(String username, String clanNombre) {
         logger.info("Usuario " + username + " intentando unirse al clan " + clanNombre);
         Session session = null;
+
         try {
             session = FactorySession.openSession();
 
@@ -123,27 +124,64 @@ public class ClanDAOImpl implements ClanDAO {
             List<Object> clanes = session.findAll(Clan.class, paramsC);
             Clan c = clanes.isEmpty() ? null : (Clan) clanes.get(0);
 
-            if (u != null && c != null) {
-                u.setClanId(c.getId());
+            if (u == null || c == null) {
+                logger.warn("Usuario o clan no encontrado");
+                return;
+            }
+
+            if (u.getClanId() != null) {
+                logger.warn("Usuario " + username + " ya pertenece a un clan");
+                throw new IllegalStateException("YA_TIENE_CLAN");
+            }
+
+            u.setClanId(c.getId());
+            session.update(u);
+
+            logger.info("Usuario " + username + " se ha unido al clan " + clanNombre);
+
+        } catch (IllegalStateException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error al unir usuario al clan: " + e.getMessage(), e);
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) session.close();
+        }
+    }
+
+
+    @Override
+    public void salirClan(String username) {
+        logger.info("Usuario " + username + " intentando salir de su clan");
+        Session session = null;
+
+        try {
+            session = FactorySession.openSession();
+
+            HashMap<String, Object> paramsU = new HashMap<>();
+            paramsU.put("username", username);
+
+            List<Object> users = session.findAll(Usuario.class, paramsU);
+            Usuario u = users.isEmpty() ? null : (Usuario) users.get(0);
+
+            if (u != null) {
+                u.setClanId(null);
                 session.update(u);
-                logger.info("Usuario " + username + " se ha unido correctamente al clan " + clanNombre + " (ID: " + c.getId() + ")");
+
+                logger.info("Usuario " + username + " ha salido correctamente del clan");
             } else {
-                if (u == null) {
-                    logger.warn("No se encontró usuario con username: " + username);
-                }
-                if (c == null) {
-                    logger.warn("No se encontró clan con nombre: " + clanNombre);
-                }
+                logger.warn("No se encontró usuario con username: " + username);
             }
 
         } catch (Exception e) {
-            logger.error("Error al unir usuario " + username + " al clan " + clanNombre + ": " + e.getMessage(), e);
+            logger.error("Error al sacar al usuario " + username + " del clan: " + e.getMessage(), e);
         } finally {
             if (session != null) {
                 session.close();
             }
         }
     }
+
 
     @Override
     public List<Usuario> getMiembros(String clanNombre) {

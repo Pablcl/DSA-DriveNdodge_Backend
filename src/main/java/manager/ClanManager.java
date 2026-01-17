@@ -13,4 +13,6 @@ public interface ClanManager {
     void unirseClan(String username, String clanNombre);
     List<Usuario> getMiembros(String clanNombre);
     public List<Clan> getAllClans();
+    void salirClan(String username);
+
 }

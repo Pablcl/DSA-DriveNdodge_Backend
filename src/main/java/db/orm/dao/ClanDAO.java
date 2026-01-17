@@ -14,4 +14,6 @@ public interface ClanDAO {
     List<Usuario> getMiembros(String clanNombre);
     public List<Clan> getAllClans();
     Clan getClanById(int id);
+    void salirClan(String username);
+
 }

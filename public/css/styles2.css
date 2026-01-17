@@ -369,44 +369,6 @@ body.clean-background2 {
     font-family: 'VT323', monospace;
 }
 
-/*.navbar-custom {*/
-/*    background: rgba(0, 0, 0, 0.55);*/
-/*    backdrop-filter: blur(6px);*/
-/*    -webkit-backdrop-filter: blur(6px);*/
-
-/*    border-bottom: 1px solid rgba(255, 255, 255, 0.15);*/
-/*}*/
-
-/*.navbar-logo-center {*/
-/*    width: 100%;*/
-/*    text-align: center;*/
-/*    margin-top: -10px;*/
-/*    margin-bottom: 5px;*/
-/*    pointer-events: none;*/
-/*}*/
-
-/*.navbar-logo-img {*/
-/*    height: 70px;*/
-/*    width: auto;*/
-/*    image-rendering: pixelated;*/
-/*}*/
-
-/*.navbar-logo-small {*/
-/*    height: 50px;     !* Ajusta la mida segons vulguis (30–45px recomanat) *!*/
-/*    width: auto;*/
-/*}*/
-
-/*.navbar {*/
-/*    min-height: 64px;*/
-/*}*/
-
-/*.navbar-nav .nav-link {*/
-/*    font-size: 1rem;*/
-/*}*/
-
-
-
-
 /* ======================================================================
    TAULES
    ====================================================================== */
@@ -545,4 +507,41 @@ body.clean-background2 {
     filter: invert(1);
 }
 
+/* ======================================================================
+   CLAN PROFILE
+   ====================================================================== */
+
+.clan-profile-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #ffc107;
+}
+
+.clan-ranking-card {
+    cursor: pointer;
+}
+
+
+.clan-ranking-avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ffc107;
+}
+
+.clan-member-avatar {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #6c757d;
+}
+
+.clan-member-self {
+    border: 3px solid #ffc107 !important;
+    box-shadow: 0 0 8px #ffc107;
+}
 
