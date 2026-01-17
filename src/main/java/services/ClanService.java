@@ -72,38 +72,60 @@ public class ClanService {
 
     @PUT
     @Path("/join/{clanName}")
-    @ApiOperation(value = "Unirse a un clan", notes = "Añade al usuario especificado al clan indicado.")
+    @ApiOperation(value = "Unirse a un clan")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Usuario unido correctamente"),
-            @ApiResponse(code = 404, message = "Clan o Usuario no encontrado")
+            @ApiResponse(code = 400, message = "Usuario no válido"),
+            @ApiResponse(code = 409, message = "El usuario ya pertenece a otro clan")
     })
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response unirseClan(@PathParam("clanName") String clanName, Usuario u) {
+
+        if (u == null || u.getUsername() == null || u.getUsername().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageResponse("Usuario no válido"))
+                    .build();
+        }
+
         try {
-            this.manager.unirseClan(u.getUsername(), clanName);
-            return Response.status(Response.Status.OK).build();
+            manager.unirseClan(u.getUsername(), clanName);
+            return Response.status(Response.Status.OK)
+                    .entity(new MessageResponse("Usuario unido correctamente"))
+                    .build();
 
         } catch (IllegalStateException e) {
-            if ("YA_TIENE_CLAN".equals(e.getMessage())) {
-                return Response.status(Response.Status.CONFLICT).entity(new MessageResponse("Ya formas parte de un clan. Debes salir antes de unirte a otro.")).build();
-            }
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(new MessageResponse(
+                            "No puedes unirte a un clan si ya eres miembro de otro"
+                    ))
+                    .build();
         }
     }
 
-
     @PUT
     @Path("/leave")
-    @ApiOperation(value = "Salir del clan", notes = "Elimina al usuario de su clan actual.")
+    @ApiOperation(value = "Salir del clan")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Usuario ha salido del clan"),
-            @ApiResponse(code = 404, message = "Usuario no encontrado")
+            @ApiResponse(code = 400, message = "Usuario no válido")
     })
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response salirClan(Usuario u) {
-        this.manager.salirClan(u.getUsername());
-        return Response.status(Response.Status.OK).build();
+
+        if (u == null || u.getUsername() == null || u.getUsername().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageResponse("Usuario no válido"))
+                    .build();
+        }
+
+        manager.salirClan(u.getUsername());
+        return Response.status(Response.Status.OK)
+                .entity(new MessageResponse("Has salido del clan"))
+                .build();
     }
+
 
 
     @GET
