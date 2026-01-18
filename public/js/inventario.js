@@ -69,9 +69,7 @@ $(document).ready(function () {
                                     <div class="pixel-font fs-5">
                                         ${item.nombre || "Sin nombre"}
                                     </div>
-                                    <div class="text-white fs-6">
-                                        ${item.precio || 0} monedas
-                                    </div>
+
                                 </div>
                             </div>
 
