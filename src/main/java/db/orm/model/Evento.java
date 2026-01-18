@@ -5,13 +5,15 @@ public class Evento {
     private String nombre;
     private String fecha;
     private String descripcion;
+    private String imagen;
 
     public Evento() {}
 
-    public Evento(String nombre, String fecha, String descripcion) {
+    public Evento(String nombre, String fecha, String descripcion, String imagen) {
         this.nombre = nombre;
         this.fecha = fecha;
         this.descripcion = descripcion;
+        this.imagen = imagen;
     }
 
     public int getId() { return id; }
@@ -22,4 +24,6 @@ public class Evento {
     public void setFecha(String fecha) { this.fecha = fecha; }
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getImagen() { return imagen; }
+    public void setImagen(String imagen) { this.imagen = imagen; }
 }

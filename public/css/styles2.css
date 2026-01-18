@@ -587,3 +587,35 @@ body.clean-background2 {
     border-color: #f5c542;
 }
 
+
+/* ======================================================================
+   CONTAINER EVENT
+   ====================================================================== */
+.eventos-container-wide {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+/* ======================================================================
+   CONTENIDOR UNIC PER ALS EVENTS (4 targetes dins)
+   ====================================================================== */
+.eventos-wrapper {
+    background-color: rgba(0, 0, 0, 0.70);
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 30px 20px;
+    margin-bottom: 40px;
+}
+/* ======================================================================
+   HEADER EVENTS (títol + descripció en un sol contenidor visible)
+   ====================================================================== */
+.eventos-header {
+    background-color: rgba(0, 0, 0, 0.70);
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 25px 20px;
+    margin-bottom: 35px;
+}
