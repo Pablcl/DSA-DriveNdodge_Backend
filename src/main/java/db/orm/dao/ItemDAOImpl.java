@@ -10,7 +10,8 @@ import org.slf4j.event.LoggingEvent;
 
 import java.util.List;
 
-public class ItemDAOImpl implements IItemDAO {
+public class
+ItemDAOImpl implements IItemDAO {
     private static final Logger LOGGER = Logger.getLogger(ShopManagerImpl.class);
 
     private static ItemDAOImpl instance;
