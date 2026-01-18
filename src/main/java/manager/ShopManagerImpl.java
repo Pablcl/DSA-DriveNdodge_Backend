@@ -49,23 +49,48 @@ public class ShopManagerImpl implements ShopManager {
     public void comprarItem(String username, int itemId) {
         Usuario usuario = usuarioDAO.getUsuarioByUsername(username);
         if (usuario == null) {
-            LOGGER.error("Intento de compra fallido: Usuario no encontrado: " + username);
+            LOGGER.error("Compra fallida: Usuario no encontrado - " + username);
             throw new RuntimeException("Usuario no encontrado");
         }
 
         Item item = itemDAO.getItem(itemId);
         if (item == null) {
-            LOGGER.error("Intento de compra fallido: Item no encontrado: " + itemId);
+            LOGGER.error("Compra fallida: Item no encontrado - " + itemId);
             throw new RuntimeException("Item no encontrado");
         }
-        int monedas = getMonedas(username);
-        if (monedas < item.getPrecio()) throw new RuntimeException("Monedas insuficientes");;
-        usuario.setMonedas(monedas-item.getPrecio());
+
+        int monedas = usuario.getMonedas();
+        if (monedas < item.getPrecio()) {
+            throw new RuntimeException("Monedas insuficientes");
+        }
+
+        usuario.setMonedas(monedas - item.getPrecio());
         usuarioDAO.updateUsuario(usuario);
-        LOGGER.info("Monedas de usuario: " + usuarioDAO.getUsuarioByUsername(username).getMonedas());
-        Inventario inventario = new Inventario(usuario.getId(), item.getId());
-        inventarioDAO.addInventario(inventario);
-        LOGGER.info("Usuario '" + username + "' ha comprado el item: " + item);
+        LOGGER.info("Usuario " + username + " pagó " + item.getPrecio() + " monedas.");
+
+
+        List<Inventario> misItems = inventarioDAO.getInventario(usuario.getId());
+
+        Inventario itemExistente = null;
+
+        for (Inventario inv : misItems) {
+            if (inv.getItemId() == itemId) {
+                itemExistente = inv;
+                break;
+            }
+        }
+        if (itemExistente != null) {
+            int nuevaCantidad = itemExistente.getCantidad() + 1;
+            itemExistente.setCantidad(nuevaCantidad);
+
+            inventarioDAO.updateInventario(itemExistente);
+            LOGGER.info("Actualizado item " + itemId + " a cantidad: " + nuevaCantidad);
+
+        } else {
+            Inventario nuevoInventario = new Inventario(usuario.getId(), item.getId(), 1);
+            inventarioDAO.addInventario(nuevoInventario);
+            LOGGER.info("Añadido nuevo item " + itemId + " al inventario.");
+        }
     }
 
 
@@ -93,27 +118,24 @@ public class ShopManagerImpl implements ShopManager {
     @Override
     public List<ItemInventarioDTO> getItemByUsuario(String username) {
         Usuario u = this.usuarioDAO.getUsuarioByUsername(username);
-        if (u == null) return null;
+        if (u == null) return new ArrayList<>();
 
         List<Inventario> inventarioList = this.inventarioDAO.getInventario(u.getId());
 
-        // Usamos un Mapa para contar: Clave=ID del Item, Valor=Objeto ItemInventario
-        Map<Integer, ItemInventarioDTO> contador = new HashMap<>();
+        List<ItemInventarioDTO> resultado = new ArrayList<>();
 
         if (inventarioList != null) {
             for (Inventario inv : inventarioList) {
                 Item item = itemDAO.getItem(inv.getItemId());
+
                 if (item != null) {
-                    if (contador.containsKey(item.getId())) {
-                        ItemInventarioDTO existente = contador.get(item.getId());
-                        existente.setCantidad(existente.getCantidad() + 1);
-                    } else {
-                        contador.put(item.getId(), new ItemInventarioDTO(item, 1));
-                    }
+                    ItemInventarioDTO dto = new ItemInventarioDTO(item, inv.getCantidad());
+                    resultado.add(dto);
                 }
             }
         }
-        return new ArrayList<>(contador.values());
+
+        return resultado;
     }
 
 

@@ -40,23 +40,35 @@ public class InventarioDAOImpl implements InventarioDAO {
         return 0;
     }
 
-
+    @Override
     public List<Inventario> getInventario(int usuarioId) {
-        Session session= null;
-        List<Inventario> listaInventario = null;
+        Session session = null;
+        List<Inventario> lista = null;
         try {
             session = FactorySession.openSession();
             HashMap<String, Object> params = new HashMap<>();
             params.put("usuarioId", usuarioId);
 
-            listaInventario = session.findAll(Inventario.class, params);
+            lista = (List<Inventario>) (List<?>) session.findAll(Inventario.class, params);
+        } catch (Exception e) {
+            LOGGER.error("ERROR LEYENDO INVENTARIO: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (session != null) session.close();
+        }
+        return lista;
+    }
 
+    public void updateInventario(Inventario inventario) {
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+            session.update(inventario);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (session != null) session.close();
         }
-
-        return listaInventario;
     }
 }
+

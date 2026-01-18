@@ -8,5 +8,5 @@ import java.util.List;
 public interface InventarioDAO {
     int addInventario(Inventario inventario);
     List<Inventario> getInventario(int usuarioId);
-
-}
+    public void updateInventario(Inventario inventario);
+    }

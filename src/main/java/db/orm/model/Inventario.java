@@ -4,11 +4,13 @@ public class Inventario {
     private int ID;
     private int usuarioId;
     private int itemId;
+    private int cantidad;
 
     public Inventario() {}
-    public Inventario(int usuarioId, int itemId) {
+    public Inventario(int usuarioId, int itemId, int cantidad) {
         this.usuarioId = usuarioId;
         this.itemId = itemId;
+        this.cantidad = cantidad;
     }
     public int getId() {return ID;}
     public void setId(int ID) {this.ID = ID;}
@@ -20,4 +22,12 @@ public class Inventario {
     public void setItemId(int itemId) {
         this.itemId = itemId;
     }
+    public int getCantidad() {
+        return cantidad;
+    }
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+
 }
