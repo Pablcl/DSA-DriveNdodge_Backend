@@ -619,3 +619,27 @@ body.clean-background2 {
     padding: 25px 20px;
     margin-bottom: 35px;
 }
+
+/* ======================================================================
+   PLAYER RANKING (similar a clanes)
+   ====================================================================== */
+
+.player-ranking-avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ffc107;
+}
+
+.fs-5 {
+    font-size: 1.5rem !important;
+}
+
+.fs-6 {
+    font-size: 1.2rem !important;
+}
+
+.fs-4 {
+    font-size: 1.8rem !important;
+}

@@ -22,9 +22,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto pixel-font">
-                <li class="nav-item"><a class="nav-link active text-gold" href="shop.html">🛒 Tienda</a></li>
+                <li class="nav-item"><a class="nav-link" href="shop.html">🛒 Tienda</a></li>
                 <li class="nav-item"><a class="nav-link" href="inventario.html">🎒 Inventario</a></li>
-                <li class="nav-item"><a class="nav-link" href="ranking.html">🏆 Ranking</a></li>
+                <li class="nav-item"><a class="nav-linka ctive text-gold" href="ranking.html">🏆 Ranking</a></li>
                 <li class="nav-item"><a class="nav-link" href="clanes.html">🛡️ Clanes</a></li>
                 <li class="nav-item"><a class="nav-link" href="eventos.html">🎮 Eventos</a></li>
 
@@ -63,19 +63,12 @@
 
                 <h1 class="text-center mb-4 text-gold">🏁 Ranking de Jugadores</h1>
 
-                <table class="table table-borderless text-center text-light">
-                    <thead>
-                    <tr class="text-gold">
-                        <th>#</th>
-                        <th>Usuario</th>
-                        <th>Nombre</th>
-                        <th>Puntuación</th>
-                    </tr>
-                    </thead>
-                    <tbody id="ranking-body">
-                    <!-- Filas generadas vía JS -->
-                    </tbody>
-                </table>
+                <div id="player-ranking-container" class="row justify-content-center">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-warning" role="status"></div>
+                    </div>
+                </div>
+
 
             </div>
 

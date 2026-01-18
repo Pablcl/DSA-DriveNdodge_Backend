@@ -7,6 +7,7 @@ public class UsuariosRankingDTO {
     private String username;
     private String nombre;
     private Integer mejorPuntuacion;
+    private String imagenPerfil;
 
     public UsuariosRankingDTO() {}
 
@@ -14,6 +15,7 @@ public class UsuariosRankingDTO {
         this.username = u.getUsername();
         this.nombre = u.getNombre();
         this.mejorPuntuacion = u.getMejorPuntuacion();
+        this.imagenPerfil = u.getImagenPerfil();
     }
 
     public String getUsername() { return username; }
@@ -24,4 +26,8 @@ public class UsuariosRankingDTO {
 
     public Integer getMejorPuntuacion() { return mejorPuntuacion; }
     public void setMejorPuntuacion(Integer mejorPuntuacion) { this.mejorPuntuacion = mejorPuntuacion; }
+
+    public String getImagenPerfil() { return imagenPerfil; }
+    public void setImagenPerfil(String imagenPerfil) { this.imagenPerfil = imagenPerfil;}
+
 }

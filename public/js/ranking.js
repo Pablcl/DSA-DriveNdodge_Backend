@@ -36,24 +36,56 @@ $(document).ready(function () {
             url: "/v1/ranking/lista",
             dataType: "json",
             success: function (data) {
-                let html = "";
-                data.forEach(function (user, index) {
-                    html += `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${user.username}</td>
-                            <td>${user.nombre || ""}</td>
-                            <td>${user.mejorPuntuacion}</td>
-                        </tr>
-                    `;
-                });
-                $("#ranking-body").html(html);
+                renderPlayerRanking(data);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error cargando el ranking:", textStatus, errorThrown);
-                alert("Error al cargar el ranking");
+            error: function () {
+                $("#player-ranking-container").html(
+                    '<p class="text-danger text-center pixel-font">Error al cargar el ranking</p>'
+                );
             }
         });
     }
+
+    function renderPlayerRanking(ranking) {
+        const container = $("#player-ranking-container");
+        container.empty();
+
+        if (!ranking || ranking.length === 0) {
+            container.html('<p class="text-muted text-center pixel-font">No hay jugadores todavía</p>');
+            return;
+        }
+
+        ranking.forEach((player, index) => {
+            container.append(`
+            <div class="col-md-8 mb-3">
+                <div class="card bg-dark text-white border-warning clan-ranking-card">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="text-gold fw-bold pixel-font fs-4">
+                                #${index + 1}
+                            </span>
+
+                            <img src="${player.imagen || 'img/avatar/default_avatar.png'}"
+                                 class="player-ranking-avatar"
+                                 onerror="this.src='img/avatar/default_avatar.png'">
+
+                            <div class="pixel-font fs-5">
+                                <div>${player.username}</div>
+                                <div class="text-muted fs-6">${player.nombre || ""}</div>
+                            </div>
+                        </div>
+
+                        <div class="pixel-font text-warning fw-bold fs-4">
+                            ${player.mejorPuntuacion} pts
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        `);
+        });
+    }
+
 
 });
