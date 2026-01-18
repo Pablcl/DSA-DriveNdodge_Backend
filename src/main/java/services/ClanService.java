@@ -157,4 +157,21 @@ public class ClanService {
         GenericEntity<List<Clan>> entity = new GenericEntity<List<Clan>>(clanes) {};
         return Response.status(Response.Status.OK).entity(entity).build();
     }
+    @GET
+    @Path("/{clanName}")
+    @ApiOperation(value = "Obtener información de un clan", notes = "Devuelve los detalles (descripción, imagen) de un clan concreto.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Clan encontrado", response = Clan.class),
+            @ApiResponse(code = 404, message = "Clan no encontrado")
+    })
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getClan(@PathParam("clanName") String clanName) {
+        Clan clan = this.manager.getClan(clanName);
+
+        if (clan != null) {
+            return Response.status(Response.Status.OK).entity(clan).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
 }
