@@ -24,7 +24,7 @@
             <ul class="navbar-nav me-auto pixel-font">
                 <li class="nav-item"><a class="nav-link" href="shop.html">🛒 Tienda</a></li>
                 <li class="nav-item"><a class="nav-link" href="inventario.html">🎒 Inventario</a></li>
-                <li class="nav-item"><a class="nav-linka ctive text-gold" href="ranking.html">🏆 Ranking</a></li>
+                <li class="nav-item"><a class="nav-link active text-gold" href="ranking.html">🏆 Ranking</a></li>
                 <li class="nav-item"><a class="nav-link" href="clanes.html">🛡️ Clanes</a></li>
                 <li class="nav-item"><a class="nav-link" href="eventos.html">🎮 Eventos</a></li>
 
@@ -55,26 +55,23 @@
     </div>
 </nav>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8">
+<div class="container mt-5 container-custom pixel-font">
 
-            <div class="container-custom profile-card pixel-font">
+    <h2 class="text-center mb-2">🏁 Ranking de Jugadores</h2>
+    <p class="text-center text-white mb-4">
+        Clasificación global de los mejores pilotos
+    </p>
 
-                <h1 class="text-center mb-4 text-gold">🏁 Ranking de Jugadores</h1>
+    <hr class="border-warning mb-4">
 
-                <div id="player-ranking-container" class="row justify-content-center">
-                    <div class="text-center py-5">
-                        <div class="spinner-border text-warning" role="status"></div>
-                    </div>
-                </div>
-
-
-            </div>
-
+    <div id="player-ranking-container" class="row justify-content-center">
+        <div class="text-center py-5">
+            <div class="spinner-border text-warning" role="status"></div>
         </div>
     </div>
+
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/ranking.js"></script>

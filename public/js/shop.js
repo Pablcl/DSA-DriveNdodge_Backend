@@ -29,7 +29,7 @@ $(document).ready(function() {
                                     <h5 class="card-title text-gold">${item.nombre}</h5>
                                     <p class="card-text">${item.descripcion}</p>
                                     <p class="text-warning fw-bold">💰 ${item.precio}</p>
-                                    <button class="btn btn-buy" data-item='${JSON.stringify(item)}'>Comprar</button>
+                                    <button class="game-btn" data-item='${JSON.stringify(item)}'>Comprar</button>
                                 </div>
                             </div>
                         </div>

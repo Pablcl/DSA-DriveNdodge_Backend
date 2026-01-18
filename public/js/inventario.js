@@ -47,18 +47,44 @@ $(document).ready(function () {
             dataType: "json",
             success: function (inventoryItems) {
                 console.log("Petición de inventario exitosa. Items:", inventoryItems);
+
+                const container = $("#inventory-container");
+                container.empty();
+
                 if (inventoryItems && inventoryItems.length > 0) {
-                    let html = "";
+
                     inventoryItems.forEach(function (item) {
-                        html += `
-                        <tr>
-                            <td>${item.nombre || "Sin nombre"}</td>
-                            <td>${item.precio || "0"}</td>
-                            <td>${item.cantidad || "1"}</td>
-                        </tr>
-                    `;
+                        container.append(`
+                <div class="col-md-8 mb-3">
+                    <div class="card bg-dark text-white border-warning inventory-card">
+                        <div class="card-body d-flex align-items-start justify-content-between">
+
+                            <div class="d-flex align-items-center gap-3">
+                                ${item.imagen ? `
+                                    <img src="${item.imagen}"
+                                         class="inventory-item-img">
+                                ` : ''}
+
+                                <div>
+                                    <div class="pixel-font fs-5">
+                                        ${item.nombre || "Sin nombre"}
+                                    </div>
+                                    <div class="text-white fs-6">
+                                        ${item.precio || 0} monedas
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pixel-font text-warning fw-bold fs-4">
+                                x${item.cantidad || 1}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            `);
                     });
-                    $("#inventory-body").html(html);
+
                 } else {
                     console.log("El inventario está vacío.");
                     $("#empty-message").show();

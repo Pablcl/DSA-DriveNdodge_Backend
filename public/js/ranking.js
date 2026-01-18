@@ -66,13 +66,14 @@ $(document).ready(function () {
                                 #${index + 1}
                             </span>
 
-                            <img src="${player.imagen || 'img/avatar/default_avatar.png'}"
-                                 class="player-ranking-avatar"
-                                 onerror="this.src='img/avatar/default_avatar.png'">
+                            <img src="img/avatar/${player.imagenPerfil || 'avatar_default.webp'}"
+                                class="player-ranking-avatar"
+                                onerror="this.src='img/avatar/avatar_default.webp'">
+
 
                             <div class="pixel-font fs-5">
                                 <div>${player.username}</div>
-                                <div class="text-muted fs-6">${player.nombre || ""}</div>
+                                <div class="text-white fs-6">${player.nombre || ""}</div>
                             </div>
                         </div>
 

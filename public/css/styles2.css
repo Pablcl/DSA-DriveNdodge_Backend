@@ -144,6 +144,16 @@ body.clean-background2 {
     white-space: nowrap;      /* que “Iniciar Sesión” no es trenqui en dues línies */
     transition: transform 0.1s ease-out;
 }
+.game-btn {
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+
 .game-btn:link,
 .game-btn:visited {
     color: #ffffff;
@@ -642,4 +652,23 @@ body.clean-background2 {
 
 .fs-4 {
     font-size: 1.8rem !important;
+}
+
+/* ======================================================================
+   INVENTORY ITEMS
+   ====================================================================== */
+.inventory-item-img {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+
+    object-fit: contain;
+    border-radius: 6px;
+    border: 2px solid #ffc107;
+
+    background-color: #111;
+    image-rendering: pixelated;
+
+    flex-shrink: 0;
 }
