@@ -32,7 +32,8 @@ public class Main {
 
         BeanConfig beanConfig = new BeanConfig();
 
-        beanConfig.setHost("localhost:8080");
+        //beanConfig.setHost("localhost:8080");
+        beanConfig.setHost("dsa5.upc.edu");
         beanConfig.setBasePath("/v1");
         beanConfig.setContact("support@example.com");
         beanConfig.setDescription("REST API for DSA project");
