@@ -16,11 +16,21 @@ $(document).ready(function() {
 
     function loadShopItems() {
         $.ajax({
-            type: 'GET', url: '/v1/shop/items', dataType: 'json',
+            type: 'GET',
+            url: '/v1/shop/items',
+            dataType: 'json',
             success: function(items) {
-                let container = $('#shop-items-container'); container.empty();
-                if (!items || items.length === 0) { container.html('<p class="text-center">No hay items disponibles.</p>'); return; }
+                let container = $('#shop-items-container');
+                container.empty();
+
+                if (!items || items.length === 0) {
+                    container.html('<p class="text-center">No hay items disponibles.</p>');
+                    return;
+                }
+
                 items.forEach(item => {
+                    let itemSafe = JSON.stringify(item).replace(/'/g, "&#39;");
+
                     container.append(`
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 card-shop border-warning bg-dark text-light">
@@ -29,21 +39,30 @@ $(document).ready(function() {
                                     <h5 class="card-title text-gold">${item.nombre}</h5>
                                     <p class="card-text">${item.descripcion}</p>
                                     <p class="text-warning fw-bold">💰 ${item.precio}</p>
-                                    <button class="game-btn" data-item='${JSON.stringify(item)}'>Comprar</button>
+                                    <button class="game-btn btn-buy-trigger" data-item='${itemSafe}'>Comprar</button>
                                 </div>
                             </div>
                         </div>
                     `);
                 });
-                $('.btn-buy').click(function() {
-                    const item = $(this).data('item');
-                    $('#confirm-message').text(`¿Deseas comprar ${item.nombre} por ${item.precio} monedas?`);
-                    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+
+                $('.btn-buy-trigger').off('click').on('click', function() {
+                    const itemData = $(this).data('item');
+
+                    $('#confirm-message').text(`¿Deseas comprar ${itemData.nombre} por ${itemData.precio} monedas?`);
+
+                    const modalEl = document.getElementById('confirmModal');
+                    const modal = new bootstrap.Modal(modalEl);
                     modal.show();
-                    $('#confirm-yes').off('click').on('click', function() { buyItem(item, modal); });
+
+                    $('#confirm-yes').off('click').on('click', function() {
+                        buyItem(itemData, modal);
+                    });
                 });
             },
-            error: function() { showToast('warning','Error cargando la tienda.'); }
+            error: function() {
+                showToast('warning','Error cargando la tienda.');
+            }
         });
     }
 
