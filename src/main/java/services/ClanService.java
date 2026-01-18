@@ -8,14 +8,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import services.DTOs.ClanCreationRequest;
-import services.DTOs.ClanRankingDTO;
-import services.DTOs.MessageResponse;
+import services.DTOs.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "/clan", description = "Servicios de gestión de Clanes")
@@ -127,23 +126,31 @@ public class ClanService {
     }
 
 
-
     @GET
     @Path("/{clanName}/members")
     @ApiOperation(value = "Obtener miembros del clan", notes = "Lista los usuarios que pertenecen a un clan.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Lista obtenida", response = Usuario.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Lista obtenida", response = UsuarioClanDTO.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "Clan no encontrado")
     })
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMiembros(@PathParam("clanName") String clanName) {
         List<Usuario> miembros = this.manager.getMiembros(clanName);
-        if (miembros != null) {
-            GenericEntity<List<Usuario>> entity = new GenericEntity<List<Usuario>>(miembros) {};
-            return Response.status(Response.Status.OK).entity(entity).build();
+        if (miembros == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        List<UsuarioClanDTO> dtoList = new ArrayList<>();
+        for (Usuario u : miembros) {
+            dtoList.add(new UsuarioClanDTO(u.getUsername(),u.getImagenPerfil()));
+        }
+
+        GenericEntity<List<UsuarioClanDTO>> entity =
+                new GenericEntity<List<UsuarioClanDTO>>(dtoList) {};
+
+        return Response.status(Response.Status.OK).entity(entity).build();
+
     }
+
 
     @GET
     @Path("/all")
