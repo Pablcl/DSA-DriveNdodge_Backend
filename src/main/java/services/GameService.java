@@ -76,4 +76,36 @@ public class GameService {
         }
     }
 
+    // SCORE
+    @POST
+    @Path("/score")
+    @ApiOperation(value = "Actualizar Récord", notes = "Solo actualiza si la puntuación es mayor a la actual")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateScore(PartidaRequest request) {
+        if (request.getUsername() == null) {
+            return Response.status(400).build();
+        }
+        boolean esRecord = this.manager.actualizarPuntuacion(request.getUsername(), request.getPuntos());
+
+        if (esRecord) {
+            return Response.status(201).entity(new MessageResponse("Nuevo Récord Guardado")).build();
+        } else {
+            return Response.status(200).entity(new MessageResponse("No es récord, no se actualiza")).build();
+        }
+    }
+    //COINS
+    @POST
+    @Path("/coins")
+    @ApiOperation(value = "Actualizar Monedas", notes = "Sobreescribe las monedas del usuario")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateCoins(PartidaRequest request) {
+        if (request.getUsername() == null) {
+            return Response.status(400).build();
+        }
+        this.manager.actualizarMonedas(request.getUsername(), request.getMonedas());
+        return Response.status(201).entity(new MessageResponse("Monedas guardadas")).build();
+    }
+
 }

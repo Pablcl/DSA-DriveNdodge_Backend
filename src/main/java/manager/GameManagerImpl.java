@@ -42,7 +42,7 @@ public class GameManagerImpl implements GameManager {
             Usuario u = (Usuario) result.get(0);
 
             int monedasActuales = u.getMonedas();
-            u.setMonedas(monedasActuales + monedasGanadas);
+            u.setMonedas(monedasGanadas);
 
             if (puntosNuevos > u.getMejorPuntuacion()) {
                 logger.info("¡Nuevo récord para " + username + "! " + puntosNuevos + " pts.");
@@ -116,6 +116,59 @@ public class GameManagerImpl implements GameManager {
 
         } catch (Exception e) {
             logger.error("Error actualizando inventario", e);
+        } finally {
+            if (session != null) session.close();
+        }
+    }
+    public boolean actualizarPuntuacion(String username, int puntosNuevos) {
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("username", username);
+            List<Object> result = session.findAll(Usuario.class, params);
+
+            if (result.isEmpty()) return false;
+            Usuario u = (Usuario) result.get(0);
+
+            if (puntosNuevos > u.getMejorPuntuacion()) {
+                u.setMejorPuntuacion(puntosNuevos);
+                session.update(u); // Guardamos solo si hay cambio
+                logger.info("¡Nuevo Récord para " + username + ": " + puntosNuevos + "!");
+                return true;
+            }
+            return false;
+
+        } catch (Exception e) {
+            logger.error("Error al actualizar puntuación", e);
+            return false;
+        } finally {
+            if (session != null) session.close();
+        }
+    }
+
+    public boolean actualizarMonedas(String username, int monedasTotales) {
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("username", username);
+            List<Object> result = session.findAll(Usuario.class, params);
+
+            if (result.isEmpty()) return false;
+            Usuario u = (Usuario) result.get(0);
+
+            u.setMonedas(monedasTotales);
+            session.update(u);
+
+            logger.info("Monedas actualizadas para " + username + ": " + monedasTotales);
+            return true;
+
+        } catch (Exception e) {
+            logger.error("Error al actualizar monedas", e);
+            return false;
         } finally {
             if (session != null) session.close();
         }
